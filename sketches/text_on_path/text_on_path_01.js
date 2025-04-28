@@ -1,5 +1,5 @@
 var points = [];
-var numSamples = 140;
+var numSamples = 180;
 
 //animation
 let speed = 1;
@@ -58,6 +58,10 @@ function setupUI() {
 
     document.getElementById("BGColor").addEventListener("input", function() {
         BGColor = this.value;
+    });
+
+    document.getElementById("showCurve").addEventListener("change", function() {
+        showCurve = this.checked;
     });
 
     sampleBezierPoints();
