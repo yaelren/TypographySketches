@@ -39,7 +39,7 @@ function setupUI() {
     });
 
     document.getElementById("speed").addEventListener("input", function() {
-        speed = parseFloat(this.value);
+        speed = parseInt(this.value, 10);
         console.log(speed);
     });
 
