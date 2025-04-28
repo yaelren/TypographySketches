@@ -132,15 +132,25 @@ function sampleBezierPoints() {
 function drawText() {
     fill(textColor);
     let distanceTravelled = frameCount * speed; // speed
-    // console.log(distanceTravelled);
+    let lastPos = null; // Track the last position to ensure no overlap
+
     for (let i = 0; i < textStr.length; i++) {
         let idx = (distanceTravelled + i * spacing) % points.length;
         let pos = points[idx];
-        if(pos != null) {
+
+        if (pos != null) {
+            // Check if the current position is too close to the last position
+            if (lastPos && dist(pos.x, pos.y, lastPos.x, lastPos.y) < spacing) {
+                continue; // Skip drawing this character if it would overlap
+            }
+
+            // Check if the position is at the start of the path and ensure no overlap
+            if (idx < i * spacing) {
+                break; // Stop drawing if the text would loop back and overlap
+            }
+
             text(textStr[i], pos.x, pos.y);
-        }
-        else {
-            // console.log("null");
+            lastPos = pos; // Update the last position
         }
     }
 }
