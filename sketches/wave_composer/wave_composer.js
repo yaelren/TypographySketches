@@ -1,5 +1,5 @@
-let xPhase = 20;
-let yPhase = 0;
+let xPhase = 1;
+let yPhase = 1;
 let xMagnitude = 0.4;
 let yMagnitude = 0.4;
 let xPhaseSlider, yPhaseSlider;
@@ -47,7 +47,7 @@ function setup() {
 }
 
 function draw() {
-    background("blue");
+    // background("blue");
     fill(255);
     noStroke();
 
@@ -58,17 +58,17 @@ function draw() {
 
     translate(width / 2, height / 2);
 
-    for(let i = 0; i < amountOfPoints; i++) {
-        let waveX = sin(radians(frameCount * xPhase + i)) *  height * xMagnitude;
-        let waveY = cos(radians(frameCount * yPhase + i)) *  height * yMagnitude;
-        ellipse(waveX, waveY, 5, 5);
-    }
-
-
-    // for (let i = 0; i < 1; i++) {
+    // for(let i = 0; i < amountOfPoints; i++) {
     //     let waveX = sin(radians(frameCount * xPhase + i)) *  height * xMagnitude;
     //     let waveY = cos(radians(frameCount * yPhase + i)) *  height * yMagnitude;
     //     ellipse(waveX, waveY, 5, 5);
     // }
+
+
+    for (let i = 0; i < 1; i++) {
+        let waveX = sin(radians(frameCount * xPhase + i)) *  height * xMagnitude;
+        let waveY = cos(radians(frameCount * yPhase + i)) *  height * yMagnitude;
+        ellipse(waveX, waveY, 5, 5);
+    }
 
 }
