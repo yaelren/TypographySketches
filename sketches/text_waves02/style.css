@@ -1,0 +1,34 @@
+body, html {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: red;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+
+}
+
+#ui {
+    background: rgb(167, 167, 167);
+    height: 100vh;
+    padding: 15px;
+}
+
+#artboard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: blue;
+    height: 100vh;
+}
+
+#canvasWrapper {
+    width: 100%;
+    height: 100%;
+}
