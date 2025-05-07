@@ -54,12 +54,25 @@
         <input type="range" id="fontSize" min="10" max="200" step="1" value="50">
         <span id="fontSizeValue">50</span><br>
 
-        <label for="spaceBetweenWords">Space Between Words:</label>
-        <input type="range" id="spaceBetweenWords" min="0" max="200" step="5" value="30">
-        <span id="spaceBetweenWordsValue">30</span><br>
+        <label for="stepBetweenWords">Step Between Words:</label>
+        <input type="range" id="stepBetweenWords" min="0" max="100" step="1" value="30">
+        <span id="stepBetweenWordsValue">30</span><br>
+
+        <!-- <label for="spaceBetweenWords">Space Between Words:</label>
+        <input type="range" id="spaceBetweenWords" min="0" max="100" step="1" value="0">
+        <span id="spaceBetweenWordsValue">0</span><br> -->
+
 
         <label for="shouldRepeatText">Repeat Text:</label>
         <input type="checkbox" id="shouldRepeatText" checked><br>
+
+        <!-- New Rotate On Wave Control -->
+        <label for="rotateOnWave">Rotate On Wave:</label>
+        <input type="checkbox" id="rotateOnWave" checked><br>
+
+        <!-- New Reverse Animation Control -->
+        <label for="reverseAnimation">Reverse Animation:</label>
+        <input type="checkbox" id="reverseAnimation"><br>
     </div>
 
     <div id="artboard">
@@ -110,8 +123,12 @@
             updateValueDisplay('fontSize', this.value);
         });
 
-        document.getElementById('spaceBetweenWords').addEventListener('input', function() {
-            updateValueDisplay('spaceBetweenWords', this.value);
+        // document.getElementById('spaceBetweenWords').addEventListener('input', function() {
+        //     updateValueDisplay('spaceBetweenWords', this.value);
+        // });
+
+        document.getElementById('stepBetweenWords').addEventListener('input', function() {
+            updateValueDisplay('stepBetweenWords', this.value);
         });
 
         // Add event listeners to toggle inputs based on wave type
@@ -121,6 +138,18 @@
 
         document.getElementById('waveTypeY').addEventListener('change', function() {
             toggleInputs('waveTypeY', 'yPhase', 'yMagnitude');
+        });
+
+        // Add event listener for rotateOnWave
+        document.getElementById('rotateOnWave').addEventListener('change', function() {
+            rotateOnWave = this.checked;
+        });
+
+        // Add event listener for reverseAnimation
+        const reverseAnimationElement = document.getElementById('reverseAnimation');
+        reverseAnimation = reverseAnimationElement.checked;
+        reverseAnimationElement.addEventListener('change', function() {
+            reverseAnimation = this.checked;
         });
 
         // Initial toggle to set the correct state on page load

@@ -8,17 +8,22 @@ let xMagnitude = 0.4;
 let yMagnitude = 0.22;
 let waveTypeX = 'sin';
 let waveTypeY = 'tan';
+let reverseAnimation = false;
+let rotateOnWave = true;
 
 //Typography
 let textInput = "hello how are you";
 let fontSize = 50;
-let spaceBetweenWords=30;
+let stepBetweenWords=30;
+let spaceBetweenWords=0;
 let shouldRepeatText = true;
+let elements = [];
+
 
 
 //=========================================
 
-let padding = 1;
+let padding = 170;
 
 function setup() {
     var c = createCanvas(windowWidth, windowHeight);
@@ -40,17 +45,37 @@ function draw() {
 
 
 function drawText() {
-    let words = textInput.split(" ");
     let elementWidth = fontSize;
-    let numOfElements = words.length;
+
+    let numOfElements = elements.length;
     if (shouldRepeatText) {
-        numOfElements = 200 ;
+        numOfElements = 100;
     }
 
-    drawWaveElements(numOfElements, elementWidth, spaceBetweenWords, (i) => {
+    drawWaveElements(numOfElements, elementWidth, stepBetweenWords, (i) => {
         textSize(elementWidth);
-        let wordIndex = i % words.length;
-        text(words[wordIndex], 0, 0);
+        let element = elements[i % elements.length];
+
+        let angleX = radians(frameCount * speed * xPhase + i * stepBetweenWords);
+        let angleY = radians(frameCount * speed * yPhase + i * stepBetweenWords);
+
+        let waveX = calculateWaveValue(angleX, height * xMagnitude, waveTypeX, i, elementWidth);
+        let waveY = calculateWaveValue(angleY, height * yMagnitude, waveTypeY, i, elementWidth);
+
+        // Calculate the angle of rotation based on the wave
+        let angle = -atan2(waveY, waveX);
+
+        // Apply rotation if rotateOnWave is true
+        if (rotateOnWave) {
+            rotate(angle);
+        }
+
+        text(element, 0, 0);
+
+        // Reset rotation
+        if (rotateOnWave) {
+            rotate(-angle);
+        }
     });
 }
 
@@ -58,7 +83,7 @@ function drawWave() {
     let numOfElements = 200;
     let elementWidth = fontSize;
 
-    drawWaveElements(numOfElements, elementWidth, spaceBetweenWords, () => {
+    drawWaveElements(numOfElements, elementWidth, stepBetweenWords, () => {
         fill("green");
         ellipse(0, 0, elementWidth, elementWidth);
     });
@@ -67,6 +92,7 @@ function drawWave() {
 function drawWaveElements(numOfElements, elementWidth, step, drawElement) {
  
     push();
+    let directionMultiplier = reverseAnimation ? -1 : 1;
     let xTranslate = elementWidth / 2;
     let yTranslate = height / 2;
     if(waveTypeX === 'static'){
@@ -81,11 +107,11 @@ function drawWaveElements(numOfElements, elementWidth, step, drawElement) {
 
     for (let i = 0; i < numOfElements; i++) {
         push();
-        let angleX = radians(frameCount * speed * xPhase + i * step);
-        let angleY = radians(frameCount * speed * yPhase + i * step);
+        let angleX = radians(frameCount * speed * xPhase * directionMultiplier + i * step);
+        let angleY = radians(frameCount * speed * yPhase * directionMultiplier + i * step);
 
-        let waveX = calculateWaveValue(angleX, height * xMagnitude, waveTypeX, i, elementWidth);
-        let waveY = calculateWaveValue(angleY, height * yMagnitude, waveTypeY, i, elementWidth);
+        let waveX = calculateWaveValue(angleX, height * xMagnitude, waveTypeX, i, 20);
+        let waveY = calculateWaveValue(angleY, height * yMagnitude, waveTypeY, i, 20);
 
         translate(waveX, waveY);
         drawElement(i);
@@ -176,10 +202,10 @@ function setUpUI() {
         fontSize = parseInt(this.value, 10);
     });
 
-    const spaceBetweenWordsElement = document.getElementById('spaceBetweenWords');
-    spaceBetweenWords = parseInt(spaceBetweenWordsElement.value, 10);
-    spaceBetweenWordsElement.addEventListener('input', function() {
-        spaceBetweenWords = parseInt(this.value, 10);
+    const stepBetweenWordsElement = document.getElementById('stepBetweenWords');
+    stepBetweenWords = parseInt(stepBetweenWordsElement.value, 10);
+    stepBetweenWordsElement.addEventListener('input', function() {
+        stepBetweenWords = parseInt(this.value, 10);
     });
 
     const shouldRepeatTextElement = document.getElementById('shouldRepeatText');
@@ -187,4 +213,36 @@ function setUpUI() {
     shouldRepeatTextElement.addEventListener('change', function() {
         shouldRepeatText = this.checked;
     });
+
+    // Add event listener for reverseAnimation
+    const reverseAnimationElement = document.getElementById('reverseAnimation');
+    reverseAnimation = reverseAnimationElement.checked;
+    reverseAnimationElement.addEventListener('change', function() {
+        reverseAnimation = this.checked;
+    });
+
+    updateElementsArray();
+
+    // const spaceBetweenWordsElement = document.getElementById('spaceBetweenWords');
+    // spaceBetweenWords = parseInt(spaceBetweenWordsElement.value, 10);
+    // updateElementsArray();
+    // spaceBetweenWordsElement.addEventListener('input', function() {
+    //     spaceBetweenWords = parseInt(this.value, 10);
+    //     updateElementsArray();
+    // });
+}
+
+function updateElementsArray() {
+    let words = textInput.split(" ");
+    elements = words;
+
+    // // Build the list of elements to draw, including spaces
+    // words.forEach((word, index) => {
+    //     elements.push(word);
+    //     if (index < words.length - 1) { // Don't add spaces after the last word
+    //         for (let i = 0; i < spaceBetweenWords; i++) {
+    //             elements.push(" ");
+    //         }
+    //     }
+    // });
 }
