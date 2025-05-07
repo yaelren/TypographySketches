@@ -3,16 +3,14 @@
 </head>
 
 <body>
-    
+
     <div id="ui">
         <!-- Typography Controls -->
         <label for="textInput">Text Input:</label>
         <br>
         <textarea id="textInput" rows="4" cols="50">hello how are you</textarea><br>
 
-        <!-- Wave Controls -->
-        <label for="showWave">Show Wave:</label>
-        <input type="checkbox" id="showWave" checked><br>
+ 
 
         <label for="speed">Speed:</label>
         <input type="range" id="speed" min="0" max="10" step="0.01" value="1">
@@ -54,31 +52,73 @@
         <input type="range" id="fontSize" min="10" max="200" step="1" value="50">
         <span id="fontSizeValue">50</span><br>
 
-        <label for="stepBetweenWords">Step Between Words:</label>
+        <label for="stepBetweenWords">Wave Step:</label>
         <input type="range" id="stepBetweenWords" min="0" max="100" step="1" value="30">
         <span id="stepBetweenWordsValue">30</span><br>
 
-        <!-- <label for="spaceBetweenWords">Space Between Words:</label>
-        <input type="range" id="spaceBetweenWords" min="0" max="100" step="1" value="0">
-        <span id="spaceBetweenWordsValue">0</span><br> -->
+        <label for="spaceBetweenWords">Space Between Words:</label>
+        <input type="range" id="spaceBetweenWords" min="0" max="50" step="1" value="0">
+        <span id="spaceBetweenWordsValue">0</span><br>
 
 
         <label for="shouldRepeatText">Repeat Text:</label>
-        <input type="checkbox" id="shouldRepeatText" checked><br>
+        <input type="checkbox" id="shouldRepeatText"><br>
+        <!-- Add this inside the <div id="ui">, below the Repeat Text checkbox -->
+        <div id="repetitionControls" style="display: none;">
+            <label for="numRepetitions">Number of Repetitions:</label>
+            <button id="decreaseRepetitions">-</button>
+            <span id="numRepetitions">1</span>
+            <button id="increaseRepetitions">+</button>
+        </div>
 
         <!-- New Rotate On Wave Control -->
         <label for="rotateOnWave">Rotate On Wave:</label>
-        <input type="checkbox" id="rotateOnWave" checked><br>
+        <input type="checkbox" id="rotateOnWave" ><br>
 
         <!-- New Reverse Animation Control -->
         <label for="reverseAnimation">Reverse Animation:</label>
         <input type="checkbox" id="reverseAnimation"><br>
+
+        <!-- Add these inside the <div id="ui"> -->
+        <label for="backgroundColor">Background Color:</label>
+        <input type="color" id="backgroundColor" value="#202004"><br>
+
+        <label for="textColor1">Text Color 1:</label>
+        <input type="color" id="textColor1" value="#ed6c44"><br>
+
+        <label for="textColor2">Text Color 2:</label>
+        <input type="color" id="textColor2" value="#e667fc"><br>
+
+        <label for="textColor3">Text Color 3:</label>
+        <input type="color" id="textColor3" value="#3638b1"><br>
+
+        <!-- Add this inside the <div id="ui"> -->
+        <label for="blendMode">Blend Mode:</label>
+        <select id="blendMode">
+            <option value="BLEND">Blend</option>
+            <option value="ADD">Add</option>
+            <option value="DARKEST">Darkest</option>
+            <option value="LIGHTEST">Lightest</option>
+            <option value="DIFFERENCE">Difference</option>
+            <option value="EXCLUSION">Exclusion</option>
+            <option value="MULTIPLY">Multiply</option>
+            <option value="SCREEN">Screen</option>
+            <option value="REPLACE">Replace</option>
+        </select><br>
+
+        <!-- Add this inside the <div id="ui"> -->
+                   <!-- Wave Controls -->
+        <label for="showWave">Show Wave:</label>
+        <input type="checkbox" id="showWave" checked><br>
+        <label for="waveDebugColor">Wave Debug Color:</label>
+        <input type="color" id="waveDebugColor" value="#006400"><br>
+
     </div>
 
     <div id="artboard">
         <div id="canvasWrapper"></div>
     </div>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
 
     <script src="./text_waves02.js"></script>
@@ -99,56 +139,56 @@
         }
 
         // Add event listeners to update the value display
-        document.getElementById('speed').addEventListener('input', function() {
+        document.getElementById('speed').addEventListener('input', function () {
             updateValueDisplay('speed', this.value);
         });
 
-        document.getElementById('xPhase').addEventListener('input', function() {
+        document.getElementById('xPhase').addEventListener('input', function () {
             updateValueDisplay('xPhase', this.value);
         });
 
-        document.getElementById('yPhase').addEventListener('input', function() {
+        document.getElementById('yPhase').addEventListener('input', function () {
             updateValueDisplay('yPhase', this.value);
         });
 
-        document.getElementById('xMagnitude').addEventListener('input', function() {
+        document.getElementById('xMagnitude').addEventListener('input', function () {
             updateValueDisplay('xMagnitude', this.value);
         });
 
-        document.getElementById('yMagnitude').addEventListener('input', function() {
+        document.getElementById('yMagnitude').addEventListener('input', function () {
             updateValueDisplay('yMagnitude', this.value);
         });
 
-        document.getElementById('fontSize').addEventListener('input', function() {
+        document.getElementById('fontSize').addEventListener('input', function () {
             updateValueDisplay('fontSize', this.value);
         });
 
-        // document.getElementById('spaceBetweenWords').addEventListener('input', function() {
-        //     updateValueDisplay('spaceBetweenWords', this.value);
-        // });
+        document.getElementById('spaceBetweenWords').addEventListener('input', function() {
+            updateValueDisplay('spaceBetweenWords', this.value);
+        });
 
-        document.getElementById('stepBetweenWords').addEventListener('input', function() {
+        document.getElementById('stepBetweenWords').addEventListener('input', function () {
             updateValueDisplay('stepBetweenWords', this.value);
         });
 
         // Add event listeners to toggle inputs based on wave type
-        document.getElementById('waveTypeX').addEventListener('change', function() {
+        document.getElementById('waveTypeX').addEventListener('change', function () {
             toggleInputs('waveTypeX', 'xPhase', 'xMagnitude');
         });
 
-        document.getElementById('waveTypeY').addEventListener('change', function() {
+        document.getElementById('waveTypeY').addEventListener('change', function () {
             toggleInputs('waveTypeY', 'yPhase', 'yMagnitude');
         });
 
-        // Add event listener for rotateOnWave
-        document.getElementById('rotateOnWave').addEventListener('change', function() {
-            rotateOnWave = this.checked;
-        });
+        // // Add event listener for rotateOnWave
+        // document.getElementById('rotateOnWave').addEventListener('change', function () {
+        //     rotateOnWave = this.checked;
+        // });
 
         // Add event listener for reverseAnimation
         const reverseAnimationElement = document.getElementById('reverseAnimation');
         reverseAnimation = reverseAnimationElement.checked;
-        reverseAnimationElement.addEventListener('change', function() {
+        reverseAnimationElement.addEventListener('change', function () {
             reverseAnimation = this.checked;
         });
 

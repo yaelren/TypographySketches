@@ -19,7 +19,16 @@ let spaceBetweenWords=0;
 let shouldRepeatText = true;
 let elements = [];
 
+// Color Variables
+let backgroundColor = '#000000';
+let textColors = ['#FFFFFF', '#FF0000', '#00FF00'];
 
+// Blend Mode Variable
+let currentBlendMode = "BLEND";
+
+// Add this variable at the top with other UI variables
+let numRepetitions = 1;
+let waveDebugColor = '#00FF00';
 
 //=========================================
 
@@ -29,12 +38,34 @@ function setup() {
     var c = createCanvas(windowWidth, windowHeight);
     c.parent("canvasWrapper");
     setUpUI();
+
+    // Initialize colors
+    backgroundColor = document.getElementById('backgroundColor').value;
+    textColors[0] = document.getElementById('textColor1').value;
+    textColors[1] = document.getElementById('textColor2').value;
+    textColors[2] = document.getElementById('textColor3').value;
+    waveDebugColor = document.getElementById('waveDebugColor').value;
+
+    // Initialize blend mode
+    const blendModeElement = document.getElementById('blendMode');
+    currentBlendMode = getBlendMode(blendModeElement.value);
+    blendModeElement.addEventListener('change', function() {
+        currentBlendMode = getBlendMode(this.value);
+    });
+
+    // Add event listener for wave debug color
+    document.getElementById('waveDebugColor').addEventListener('input', function() {
+        waveDebugColor = this.value;
+    });
 }
 
 function draw() {
-    background(0);
+    background(backgroundColor);
     textAlign(CENTER,CENTER);
     translate(width/2, 0);
+
+    // Apply the current blend mode
+    blendMode(BLEND);
 
     if(showWave){
         drawWave();
@@ -49,18 +80,27 @@ function drawText() {
 
     let numOfElements = elements.length;
     if (shouldRepeatText) {
-        numOfElements = 100;
+        numOfElements = elements.length * numRepetitions;
     }
+    let widthSize = width / numOfElements;
 
-    drawWaveElements(numOfElements, elementWidth, stepBetweenWords, (i) => {
+    drawWaveElements(numOfElements, widthSize, stepBetweenWords, (i) => {
         textSize(elementWidth);
         let element = elements[i % elements.length];
+
+        // Set the fill color based on the index
+        if (element.trim() !== "") {
+            fill(textColors[i % textColors.length]);
+        }
+
+        // Apply the current blend mode for each text element
+        blendMode(currentBlendMode);
 
         let angleX = radians(frameCount * speed * xPhase + i * stepBetweenWords);
         let angleY = radians(frameCount * speed * yPhase + i * stepBetweenWords);
 
-        let waveX = calculateWaveValue(angleX, height * xMagnitude, waveTypeX, i, elementWidth);
-        let waveY = calculateWaveValue(angleY, height * yMagnitude, waveTypeY, i, elementWidth);
+        let waveX = calculateWaveValue(angleX, height * xMagnitude, waveTypeX, i, widthSize);
+        let waveY = calculateWaveValue(angleY, height * yMagnitude, waveTypeY, i, widthSize);
 
         // Calculate the angle of rotation based on the wave
         let angle = -atan2(waveY, waveX);
@@ -76,6 +116,9 @@ function drawText() {
         if (rotateOnWave) {
             rotate(-angle);
         }
+
+        // Reset blend mode to default after drawing each text element
+        blendMode(BLEND);
     });
 }
 
@@ -84,7 +127,7 @@ function drawWave() {
     let elementWidth = fontSize;
 
     drawWaveElements(numOfElements, elementWidth, stepBetweenWords, () => {
-        fill("green");
+        fill(waveDebugColor);
         ellipse(0, 0, elementWidth, elementWidth);
     });
 }
@@ -95,11 +138,13 @@ function drawWaveElements(numOfElements, elementWidth, step, drawElement) {
     let directionMultiplier = reverseAnimation ? -1 : 1;
     let xTranslate = elementWidth / 2;
     let yTranslate = height / 2;
+    
+    let shouldPadding= shouldRepeatText ? 0 : 1;
     if(waveTypeX === 'static'){
-        xTranslate = -width/2+padding;
+        xTranslate = -width/2+(padding*shouldPadding);
     }
     if(waveTypeY === 'static'){
-        yTranslate = -height/2+padding*5;
+        yTranslate = -height/2+(padding*shouldPadding*5);
     }
     translate(xTranslate, yTranslate);
     noStroke();
@@ -194,6 +239,7 @@ function setUpUI() {
     textInput = textInputElement.value;
     textInputElement.addEventListener('input', function() {
         textInput = this.value;
+        updateElementsArray();
     });
 
     const fontSizeElement = document.getElementById('fontSize');
@@ -212,6 +258,7 @@ function setUpUI() {
     shouldRepeatText = shouldRepeatTextElement.checked;
     shouldRepeatTextElement.addEventListener('change', function() {
         shouldRepeatText = this.checked;
+        document.getElementById('repetitionControls').style.display = this.checked ? 'block' : 'none';
     });
 
     // Add event listener for reverseAnimation
@@ -223,26 +270,86 @@ function setUpUI() {
 
     updateElementsArray();
 
-    // const spaceBetweenWordsElement = document.getElementById('spaceBetweenWords');
-    // spaceBetweenWords = parseInt(spaceBetweenWordsElement.value, 10);
-    // updateElementsArray();
-    // spaceBetweenWordsElement.addEventListener('input', function() {
-    //     spaceBetweenWords = parseInt(this.value, 10);
-    //     updateElementsArray();
-    // });
+    const spaceBetweenWordsElement = document.getElementById('spaceBetweenWords');
+    spaceBetweenWords = parseInt(spaceBetweenWordsElement.value, 10);
+    updateElementsArray();
+    spaceBetweenWordsElement.addEventListener('input', function() {
+        spaceBetweenWords = parseInt(this.value, 10);
+        updateElementsArray();
+    });
+
+    const rotateOnWaveElement = document.getElementById('rotateOnWave');
+    rotateOnWave = rotateOnWaveElement.checked;
+    rotateOnWaveElement.addEventListener('change', function() {
+        rotateOnWave = this.checked;
+    });
+    
+    // Repetition controls
+    document.getElementById('increaseRepetitions').addEventListener('click', function() {
+        numRepetitions++;
+        document.getElementById('numRepetitions').textContent = numRepetitions;
+    });
+
+    document.getElementById('decreaseRepetitions').addEventListener('click', function() {
+        if (numRepetitions > 1) {
+            numRepetitions--;
+            document.getElementById('numRepetitions').textContent = numRepetitions;
+        }
+    });
+
+    // Add event listeners for color inputs
+    document.getElementById('backgroundColor').addEventListener('input', function() {
+        backgroundColor = this.value;
+    });
+
+    document.getElementById('textColor1').addEventListener('input', function() {
+        textColors[0] = this.value;
+    });
+
+    document.getElementById('textColor2').addEventListener('input', function() {
+        textColors[1] = this.value;
+    });
+
+    document.getElementById('textColor3').addEventListener('input', function() {
+        textColors[2] = this.value;
+    });
 }
 
 function updateElementsArray() {
     let words = textInput.split(" ");
-    elements = words;
+    elements = [];
 
-    // // Build the list of elements to draw, including spaces
-    // words.forEach((word, index) => {
-    //     elements.push(word);
-    //     if (index < words.length - 1) { // Don't add spaces after the last word
-    //         for (let i = 0; i < spaceBetweenWords; i++) {
-    //             elements.push(" ");
-    //         }
-    //     }
-    // });
+    // Build the list of elements to draw, including spaces
+    words.forEach((word, index) => {
+        elements.push(word);
+        if (index < words.length) { //  add spaces after the last word
+            for (let i = 0; i < spaceBetweenWords; i++) {
+                elements.push(" ");
+            }
+        }
+    });
+}
+
+// Function to map blend mode string to p5.js constant
+function getBlendMode(mode) {
+    switch (mode) {
+        case 'ADD':
+            return ADD;
+        case 'DARKEST':
+            return DARKEST;
+        case 'LIGHTEST':
+            return LIGHTEST;
+        case 'DIFFERENCE':
+            return DIFFERENCE;
+        case 'EXCLUSION':
+            return EXCLUSION;
+        case 'MULTIPLY':
+            return MULTIPLY;
+        case 'SCREEN':
+            return SCREEN;
+        case 'REPLACE':
+            return REPLACE;
+        default:
+            return BLEND;
+    }
 }
