@@ -18,7 +18,7 @@ let shouldRepeatText = true;
 
 //=========================================
 
-let padding = 200;
+let padding = 1;
 
 function setup() {
     var c = createCanvas(windowWidth, windowHeight);
@@ -28,12 +28,13 @@ function setup() {
 
 function draw() {
     background(0);
+    textAlign(CENTER,CENTER);
     translate(width/2, 0);
 
-    drawText();
     if(showWave){
         drawWave();
     }
+    drawText();
     
 }
 
@@ -43,21 +44,21 @@ function drawText() {
     let elementWidth = fontSize;
     let numOfElements = words.length;
     if (shouldRepeatText) {
-        numOfElements = elementWidth * xMagnitude;
+        numOfElements = 200 ;
     }
 
     drawWaveElements(numOfElements, elementWidth, spaceBetweenWords, (i) => {
         textSize(elementWidth);
-        let charIndex = i % words.length;
-        text(words[charIndex], 0, 0);
+        let wordIndex = i % words.length;
+        text(words[wordIndex], 0, 0);
     });
 }
 
 function drawWave() {
     let numOfElements = 200;
-    let elementWidth = width / numOfElements;
+    let elementWidth = fontSize;
 
-    drawWaveElements(numOfElements, elementWidth, spaceBetweenWords/7, () => {
+    drawWaveElements(numOfElements, elementWidth, spaceBetweenWords, () => {
         fill("green");
         ellipse(0, 0, elementWidth, elementWidth);
     });

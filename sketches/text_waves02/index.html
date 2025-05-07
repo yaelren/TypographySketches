@@ -15,19 +15,24 @@
         <input type="checkbox" id="showWave" checked><br>
 
         <label for="speed">Speed:</label>
-        <input type="range" id="speed" min="0" max="10" step="0.1" value="1"><br>
+        <input type="range" id="speed" min="0" max="10" step="0.01" value="1">
+        <span id="speedValue">1</span><br>
 
         <label for="xPhase">X Phase:</label>
-        <input type="range" id="xPhase" min="0" max="2" step="0.1" value="0.5"><br>
+        <input type="range" id="xPhase" min="0" max="2" step="0.1" value="0.5">
+        <span id="xPhaseValue">0.5</span><br>
 
         <label for="yPhase">Y Phase:</label>
-        <input type="range" id="yPhase" min="0" max="2" step="0.1" value="0.5"><br>
+        <input type="range" id="yPhase" min="0" max="2" step="0.1" value="0.5">
+        <span id="yPhaseValue">0.5</span><br>
 
         <label for="xMagnitude">X Magnitude:</label>
-        <input type="range" id="xMagnitude" min="0" max="1" step="0.1" value="0.4"><br>
+        <input type="range" id="xMagnitude" min="0" max="1" step="0.1" value="0.4">
+        <span id="xMagnitudeValue">0.4</span><br>
 
         <label for="yMagnitude">Y Magnitude:</label>
-        <input type="range" id="yMagnitude" min="0" max="1" step="0.1" value="0.22"><br>
+        <input type="range" id="yMagnitude" min="0" max="1" step="0.1" value="0.22">
+        <span id="yMagnitudeValue">0.22</span><br>
 
         <label for="waveTypeX">Wave Type X:</label>
         <select id="waveTypeX">
@@ -46,10 +51,12 @@
         </select><br>
 
         <label for="fontSize">Font Size:</label>
-        <input type="range" id="fontSize" min="10" max="100" step="1" value="50"><br>
+        <input type="range" id="fontSize" min="10" max="200" step="1" value="50">
+        <span id="fontSizeValue">50</span><br>
 
         <label for="spaceBetweenWords">Space Between Words:</label>
-        <input type="range" id="spaceBetweenWords" min="0" max="100" step="1" value="30"><br>
+        <input type="range" id="spaceBetweenWords" min="0" max="200" step="5" value="30">
+        <span id="spaceBetweenWordsValue">30</span><br>
 
         <label for="shouldRepeatText">Repeat Text:</label>
         <input type="checkbox" id="shouldRepeatText" checked><br>
@@ -63,5 +70,62 @@
 
     <script src="./text_waves02.js"></script>
     <script src="./easing.js"></script>
+
+    <script>
+        // Function to update the value display
+        function updateValueDisplay(id, value) {
+            document.getElementById(id + 'Value').textContent = value;
+        }
+
+        // Function to enable or disable inputs based on wave type
+        function toggleInputs(waveTypeId, phaseId, magnitudeId) {
+            const waveType = document.getElementById(waveTypeId).value;
+            const isStatic = waveType === 'static';
+            document.getElementById(phaseId).disabled = isStatic;
+            document.getElementById(magnitudeId).disabled = isStatic;
+        }
+
+        // Add event listeners to update the value display
+        document.getElementById('speed').addEventListener('input', function() {
+            updateValueDisplay('speed', this.value);
+        });
+
+        document.getElementById('xPhase').addEventListener('input', function() {
+            updateValueDisplay('xPhase', this.value);
+        });
+
+        document.getElementById('yPhase').addEventListener('input', function() {
+            updateValueDisplay('yPhase', this.value);
+        });
+
+        document.getElementById('xMagnitude').addEventListener('input', function() {
+            updateValueDisplay('xMagnitude', this.value);
+        });
+
+        document.getElementById('yMagnitude').addEventListener('input', function() {
+            updateValueDisplay('yMagnitude', this.value);
+        });
+
+        document.getElementById('fontSize').addEventListener('input', function() {
+            updateValueDisplay('fontSize', this.value);
+        });
+
+        document.getElementById('spaceBetweenWords').addEventListener('input', function() {
+            updateValueDisplay('spaceBetweenWords', this.value);
+        });
+
+        // Add event listeners to toggle inputs based on wave type
+        document.getElementById('waveTypeX').addEventListener('change', function() {
+            toggleInputs('waveTypeX', 'xPhase', 'xMagnitude');
+        });
+
+        document.getElementById('waveTypeY').addEventListener('change', function() {
+            toggleInputs('waveTypeY', 'yPhase', 'yMagnitude');
+        });
+
+        // Initial toggle to set the correct state on page load
+        toggleInputs('waveTypeX', 'xPhase', 'xMagnitude');
+        toggleInputs('waveTypeY', 'yPhase', 'yMagnitude');
+    </script>
 
 </body>
