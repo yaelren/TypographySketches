@@ -5,9 +5,55 @@
 <body>
     
     <div id="ui">
+        <!-- Typography Controls -->
+        <label for="textInput">Text Input:</label>
+        <br>
+        <textarea id="textInput" rows="4" cols="50">hello how are you</textarea><br>
 
+        <!-- Wave Controls -->
+        <label for="showWave">Show Wave:</label>
+        <input type="checkbox" id="showWave" checked><br>
+
+        <label for="speed">Speed:</label>
+        <input type="range" id="speed" min="0" max="10" step="0.1" value="1"><br>
+
+        <label for="xPhase">X Phase:</label>
+        <input type="range" id="xPhase" min="0" max="2" step="0.1" value="0.5"><br>
+
+        <label for="yPhase">Y Phase:</label>
+        <input type="range" id="yPhase" min="0" max="2" step="0.1" value="0.5"><br>
+
+        <label for="xMagnitude">X Magnitude:</label>
+        <input type="range" id="xMagnitude" min="0" max="1" step="0.1" value="0.4"><br>
+
+        <label for="yMagnitude">Y Magnitude:</label>
+        <input type="range" id="yMagnitude" min="0" max="1" step="0.1" value="0.22"><br>
+
+        <label for="waveTypeX">Wave Type X:</label>
+        <select id="waveTypeX">
+            <option value="sin">Sin</option>
+            <option value="cos">Cos</option>
+            <option value="tan">Tan</option>
+            <option value="static">Static</option>
+        </select><br>
+
+        <label for="waveTypeY">Wave Type Y:</label>
+        <select id="waveTypeY">
+            <option value="sin">Sin</option>
+            <option value="cos">Cos</option>
+            <option value="tan">Tan</option>
+            <option value="static">Static</option>
+        </select><br>
+
+        <label for="fontSize">Font Size:</label>
+        <input type="range" id="fontSize" min="10" max="100" step="1" value="50"><br>
+
+        <label for="spaceBetweenWords">Space Between Words:</label>
+        <input type="range" id="spaceBetweenWords" min="0" max="100" step="1" value="30"><br>
+
+        <label for="shouldRepeatText">Repeat Text:</label>
+        <input type="checkbox" id="shouldRepeatText" checked><br>
     </div>
-
 
     <div id="artboard">
         <div id="canvasWrapper"></div>

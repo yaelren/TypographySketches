@@ -1,6 +1,3 @@
-
-
-
 // ============= UI Variables =============
 //Wave
 let showWave = true;
@@ -21,6 +18,8 @@ let shouldRepeatText = true;
 
 //=========================================
 
+let padding = 200;
+
 function setup() {
     var c = createCanvas(windowWidth, windowHeight);
     c.parent("canvasWrapper");
@@ -31,46 +30,73 @@ function draw() {
     background(0);
     translate(width/2, 0);
 
-   drawText();
+    drawText();
+    if(showWave){
+        drawWave();
+    }
+    
 }
 
-function drawText(){
-    let words= textInput.split(" ");
+
+function drawText() {
+    let words = textInput.split(" ");
     let elementWidth = fontSize;
-    let numOfElements = words.length;;
-    if(shouldRepeatText){
-        numOfElements = elementWidth *xMagnitude;
+    let numOfElements = words.length;
+    if (shouldRepeatText) {
+        numOfElements = elementWidth * xMagnitude;
     }
 
-    let step =spaceBetweenWords;
-    push();
-    translate(elementWidth/2, height/2);
-    fill("#f1f1f1");
-    let debugEllipseSize = 20;
-    noStroke();
-  
-  
-    for (let i = 0; i < numOfElements; i++) {
-      push();
-        let angleX = radians(frameCount * speed * xPhase + i * step);
-        let angleY = radians(frameCount * speed * yPhase + i * step);
-
-        let waveX = calculateWaveValue(angleX, height * xMagnitude, waveTypeX);
-        let waveY = calculateWaveValue(angleY, height * yMagnitude, waveTypeY);
-        translate(waveX, waveY);
+    drawWaveElements(numOfElements, elementWidth, spaceBetweenWords, (i) => {
         textSize(elementWidth);
         let charIndex = i % words.length;
         text(words[charIndex], 0, 0);
-        if(showWave){
-            fill("green");
-            ellipse(0, 0, debugEllipseSize, debugEllipseSize);
-        }
-      pop();
+    });
+}
+
+function drawWave() {
+    let numOfElements = 200;
+    let elementWidth = width / numOfElements;
+
+    drawWaveElements(numOfElements, elementWidth, spaceBetweenWords/7, () => {
+        fill("green");
+        ellipse(0, 0, elementWidth, elementWidth);
+    });
+}
+
+function drawWaveElements(numOfElements, elementWidth, step, drawElement) {
+ 
+    push();
+    let xTranslate = elementWidth / 2;
+    let yTranslate = height / 2;
+    if(waveTypeX === 'static'){
+        xTranslate = -width/2+padding;
+    }
+    if(waveTypeY === 'static'){
+        yTranslate = -height/2+padding*5;
+    }
+    translate(xTranslate, yTranslate);
+    noStroke();
+    fill("#f1f1f1");
+
+    for (let i = 0; i < numOfElements; i++) {
+        push();
+        let angleX = radians(frameCount * speed * xPhase + i * step);
+        let angleY = radians(frameCount * speed * yPhase + i * step);
+
+        let waveX = calculateWaveValue(angleX, height * xMagnitude, waveTypeX, i, elementWidth);
+        let waveY = calculateWaveValue(angleY, height * yMagnitude, waveTypeY, i, elementWidth);
+
+        translate(waveX, waveY);
+        drawElement(i);
+        pop();
     }
     pop();
 }
 
-function calculateWaveValue(angle, magnitude, waveType) {
+
+
+function calculateWaveValue(angle, magnitude, waveType, index, elementWidth) {
+
     switch (waveType) {
         case 'sin':
             return sin(angle) * magnitude;
@@ -78,12 +104,86 @@ function calculateWaveValue(angle, magnitude, waveType) {
             return cos(angle) * magnitude;
         case 'tan':
             return tan(angle) * magnitude;
+        case 'static':
+            return index * elementWidth;
         default:
             return 0;
     }
 }
 
 
-function setUpUI(){
+function setUpUI() {
+    // Wave Controls
+    const showWaveElement = document.getElementById('showWave');
+    showWave = showWaveElement.checked;
+    showWaveElement.addEventListener('change', function() {
+        showWave = this.checked;
+    });
 
+    const speedElement = document.getElementById('speed');
+    speed = parseFloat(speedElement.value);
+    speedElement.addEventListener('input', function() {
+        speed = parseFloat(this.value);
+    });
+
+    const xPhaseElement = document.getElementById('xPhase');
+    xPhase = parseFloat(xPhaseElement.value);
+    xPhaseElement.addEventListener('input', function() {
+        xPhase = parseFloat(this.value);
+    });
+
+    const yPhaseElement = document.getElementById('yPhase');
+    yPhase = parseFloat(yPhaseElement.value);
+    yPhaseElement.addEventListener('input', function() {
+        yPhase = parseFloat(this.value);
+    });
+
+    const xMagnitudeElement = document.getElementById('xMagnitude');
+    xMagnitude = parseFloat(xMagnitudeElement.value);
+    xMagnitudeElement.addEventListener('input', function() {
+        xMagnitude = parseFloat(this.value);
+    });
+
+    const yMagnitudeElement = document.getElementById('yMagnitude');
+    yMagnitude = parseFloat(yMagnitudeElement.value);
+    yMagnitudeElement.addEventListener('input', function() {
+        yMagnitude = parseFloat(this.value);
+    });
+
+    const waveTypeXElement = document.getElementById('waveTypeX');
+    waveTypeX = waveTypeXElement.value;
+    waveTypeXElement.addEventListener('change', function() {
+        waveTypeX = this.value;
+    });
+
+    const waveTypeYElement = document.getElementById('waveTypeY');
+    waveTypeY = waveTypeYElement.value;
+    waveTypeYElement.addEventListener('change', function() {
+        waveTypeY = this.value;
+    });
+
+    // Typography Controls
+    const textInputElement = document.getElementById('textInput');
+    textInput = textInputElement.value;
+    textInputElement.addEventListener('input', function() {
+        textInput = this.value;
+    });
+
+    const fontSizeElement = document.getElementById('fontSize');
+    fontSize = parseInt(fontSizeElement.value, 10);
+    fontSizeElement.addEventListener('input', function() {
+        fontSize = parseInt(this.value, 10);
+    });
+
+    const spaceBetweenWordsElement = document.getElementById('spaceBetweenWords');
+    spaceBetweenWords = parseInt(spaceBetweenWordsElement.value, 10);
+    spaceBetweenWordsElement.addEventListener('input', function() {
+        spaceBetweenWords = parseInt(this.value, 10);
+    });
+
+    const shouldRepeatTextElement = document.getElementById('shouldRepeatText');
+    shouldRepeatText = shouldRepeatTextElement.checked;
+    shouldRepeatTextElement.addEventListener('change', function() {
+        shouldRepeatText = this.checked;
+    });
 }
