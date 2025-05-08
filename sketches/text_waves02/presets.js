@@ -35,6 +35,9 @@ document.addEventListener('DOMContentLoaded', function () {
     updatePresetButtons();
     applyPreset("TEST");
 
+
+    document.getElementById('shuffleButton').addEventListener('click', shufflePreset);
+
     document.getElementById('savePresetButton').addEventListener('click', function () {
         const presetName = prompt("Enter a name for your preset:");
         if (presetName) {
@@ -66,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
             reader.readAsText(file);
         }
     });
+
 });
 
 class Preset {
@@ -112,10 +116,12 @@ function updatePresetButtons() {
     presetContainer.innerHTML = ''; // Clear existing buttons
 
     Object.keys(presetsDictionary).forEach((presetName) => {
+        if(presetName != "Random") {
         const button = document.createElement('button');
         button.textContent = presetName;
         button.addEventListener('click', () => applyPreset(presetName));
         presetContainer.appendChild(button);
+    }
     });
 }
 
@@ -165,8 +171,10 @@ function savePreset(presetName) {
 
 
 // Modify the applyPreset function to use the dictionary
-function applyPreset(presetName) {
-    const preset = presetsDictionary[presetName];
+function applyPreset(presetName, preset = null) {
+    if (preset == null) {
+        preset = presetsDictionary[presetName];
+    }
 
     if (preset) {
         document.getElementById('textInput').value = preset.textInput;
@@ -192,8 +200,50 @@ function applyPreset(presetName) {
         document.getElementById('yMagnitude').value = preset.yMagnitude;
         document.getElementById('showWave').checked = preset.showWave;
         document.getElementById('waveDebugColor').value = preset.waveDebugColor;
+        
+        // Update the sketch variables
         updateSketchVariables();
+        
+        // Call toggleInputs to enable/disable sliders based on wave type
+        toggleInputs('waveTypeX', 'xPhase', 'xMagnitude');
+        toggleInputs('waveTypeY', 'yPhase', 'yMagnitude');
+        
+        // toggleInputs();
     } else {
         console.error('Preset not found:', presetName);
     }
+}
+
+function shufflePreset() {
+    console.log("Shuffling preset");
+    const randomPreset = new Preset(
+        "Random",
+        document.getElementById('textInput').value, // Random text
+        Math.floor(Math.random() * 291) + 10, // Random font size between 10 and 300
+       0, // Random boolean for autoPulseFontSize
+        Math.floor(Math.random() * 701) + 100, // Random font weight between 100 and 800
+        0, // Random boolean for autoPulseWeight
+        Math.floor(Math.random() * 20) + 1, // Random number of repetitions between 1 and 20
+        Math.floor(Math.random() * 10), // Random space between words
+        `#${Math.floor(Math.random()*16777215).toString(16)}`, // Random background color
+        [
+            `#${Math.floor(Math.random()*16777215).toString(16)}`,
+            `#${Math.floor(Math.random()*16777215).toString(16)}`,
+            `#${Math.floor(Math.random()*16777215).toString(16)}`
+        ], // Random text colors
+        (Math.random() * 10).toFixed(2), // Random speed between 0 and 10
+        Math.random() < 0.5, // Random boolean for rotateOnWave
+        Math.random() < 0.5, // Random boolean for reverseAnimation
+        Math.floor(Math.random() * 101), // Random step between words
+        ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)], // Random wave type X
+        (Math.random() * 2).toFixed(1), // Random xPhase between 0 and 2
+        (Math.random() * 1).toFixed(1), // Random xMagnitude between 0 and 1
+        ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)], // Random wave type Y
+        (Math.random() * 2).toFixed(1), // Random yPhase between 0 and 2
+        (Math.random() * 1).toFixed(1), // Random yMagnitude between 0 and 1
+        Math.random() < 0.5, // Random boolean for showWave
+        `#${Math.floor(Math.random()*16777215).toString(16)}` // Random wave debug color
+    );
+    presetsDictionary[randomPreset.name] = randomPreset;
+    applyPreset(randomPreset.name);
 }
