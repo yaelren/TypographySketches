@@ -30,6 +30,8 @@ let currentBlendMode = "BLEND";
 // Add this variable at the top with other UI variables
 let numRepetitions = 1;
 let waveDebugColor = '#00FF00';
+let autoPulseWeight = false;
+let autoPulseFontSize = false;
 
 let currentFont = 'Wix Madefor Text';
 
@@ -101,7 +103,14 @@ function drawText() {
     const autoPulseWeight = document.getElementById('autoPulseWeight').checked;
 
     drawWaveElements(numOfElements, widthSize, stepBetweenWords, (i) => {
-        textSize(elementWidth);
+        // Calculate font size based on wave position if autoPulseFontSize is enabled
+        let currentFontSize = fontSize;
+        if (autoPulseFontSize) {
+            const t = frameCount / 60 * 1000;
+            currentFontSize = map(sin(t * 0.001 - i), -1, 1, 50, 150); // Adjust the range as needed
+        }
+
+        textSize(currentFontSize);
         let element = elements[i % elements.length];
 
         // Set the fill color based on the index
@@ -124,10 +133,9 @@ function drawText() {
 
         // Calculate font weight based on wave position if autoPulseWeight is enabled
         let currentFontWeight = fontWeight;
-        
         if (autoPulseWeight) {
-            const t = frameCount / 60 * 1000
-            currentFontWeight = map(sin(t*0.005-i), -1, 1, 200, 800);
+            const t = frameCount / 60 * 1000;
+            currentFontWeight = map(sin(t * 0.0025 - i), -1, 1, 400, 800);
         }
 
         // Apply rotation if rotateOnWave is true
@@ -394,9 +402,10 @@ function setUpUI() {
 
     // Add event listener for autoPulseWeight
     const autoPulseWeightElement = document.getElementById('autoPulseWeight');
+    autoPulseWeight = autoPulseWeightElement.checked;
     autoPulseWeightElement.addEventListener('change', function() {
-        const isChecked = this.checked;
-        document.getElementById('fontWeight').disabled = isChecked;
+        autoPulseWeight = this.checked;
+        document.getElementById('fontWeight').disabled = autoPulseWeight;
     });
 
     // // Add event listener for font italic
@@ -406,6 +415,13 @@ function setUpUI() {
     //     fontItalic = parseFloat(this.value);
     //     document.getElementById('fontItalicValue').textContent = fontItalic;
     // });
+
+    const autoPulseFontSizeElement = document.getElementById('autoPulseFontSize');
+    autoPulseFontSize = autoPulseFontSizeElement.checked;
+    autoPulseFontSizeElement.addEventListener('change', function() {
+        autoPulseFontSize = this.checked;
+        document.getElementById('fontSize').disabled = autoPulseFontSize;
+    });
 }
 
 function updateElementsArray() {
@@ -445,4 +461,36 @@ function getBlendMode(mode) {
         default:
             return BLEND;
     }
+}
+
+function updateSketchVariables() {
+    // Update global variables from UI elements
+    textInput = document.getElementById('textInput').value;
+    fontSize = parseInt(document.getElementById('fontSize').value, 10);
+    autoPulseFontSize = document.getElementById('autoPulseFontSize').checked;
+    fontWeight = parseInt(document.getElementById('fontWeight').value, 10);
+    autoPulseWeight = document.getElementById('autoPulseWeight').checked;
+    numRepetitions = parseInt(document.getElementById('numRepetitions').textContent, 10);
+    spaceBetweenWords = parseInt(document.getElementById('spaceBetweenWordsValue').textContent, 10);
+    backgroundColor = document.getElementById('backgroundColor').value;
+    textColors = [
+        document.getElementById('textColor1').value,
+        document.getElementById('textColor2').value,
+        document.getElementById('textColor3').value
+    ];
+    speed = parseFloat(document.getElementById('speed').value);
+    rotateOnWave = document.getElementById('rotateOnWave').checked;
+    reverseAnimation = document.getElementById('reverseAnimation').checked;
+    stepBetweenWords = parseInt(document.getElementById('stepBetweenWords').value, 10);
+    waveTypeX = document.getElementById('waveTypeX').value;
+    xPhase = parseFloat(document.getElementById('xPhase').value);
+    xMagnitude = parseFloat(document.getElementById('xMagnitude').value);
+    waveTypeY = document.getElementById('waveTypeY').value;
+    yPhase = parseFloat(document.getElementById('yPhase').value);
+    yMagnitude = parseFloat(document.getElementById('yMagnitude').value);
+    showWave = document.getElementById('showWave').checked;
+    waveDebugColor = document.getElementById('waveDebugColor').value;
+
+    // Update elements array
+    updateElementsArray();
 }

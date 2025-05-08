@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/p5@2.0.1/lib/p5.js"></script>
     <script src="googleFonts.js"></script>
     <script src="text_waves02.js"></script>
+    <script src="presets.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -15,132 +17,143 @@
     <div id="ui">
 
         <!-- Text Controls -->
-        <h3>Text</h3>
-        <label for="textInput">Text Input:</label>
-        <br>
-        <textarea id="textInput" rows="4" cols="50">hello how are you</textarea><br>
+        <h3>Text <button onclick="toggleSection('textControls')">▼</button></h3>
+        <div id="textControls">
+            <label for="textInput">Text Input:</label>
+            <br>
+            <textarea id="textInput" rows="4" cols="50">hello how are you</textarea><br>
 
+            <!-- Font Controls -->
+            <h4>Font Controls</h4>
+            <label for="fontSelection">Font:</label>
+            <select id="fontSelection">
+                <option value="Wix Madefor Text">Wix Madefor Text</option>
+                <option value="Roboto Flex">Roboto Flex</option>
+                <option value="Playwrite NZ">Playwrite NZ</option>
+            </select><br>
 
-        <!-- Font Controls -->
-        <h4>Font Controls</h4>
-        <label for="fontSelection">Font:</label>
-        <select id="fontSelection">
-            <option value="Wix Madefor Text">Wix Madefor Text</option>
-            <option value="Roboto Flex">Roboto Flex</option>
-            <option value="Playwrite NZ">Playwrite NZ</option>
-        </select><br>
+            <label for="fontSize">Font Size:</label>
+            <input type="range" id="fontSize" min="10" max="300" step="1" value="50">
+            <span id="fontSizeValue">50</span><br>
 
-        <label for="fontWeight">Font Weight:</label>
-        <input type="range" id="fontWeight" min="100" max="800" step="1" value="400">
-        <span id="fontWeightValue">400</span><br>
+            <label for="autoPulseFontSize">Auto Pulse Font Size:</label>
+            <input type="checkbox" id="autoPulseFontSize"><br>
 
-        <label for="autoPulseWeight">Auto Pulse Weight:</label>
-        <input type="checkbox" id="autoPulseWeight"><br>
+            <label for="fontWeight">Font Weight:</label>
+            <input type="range" id="fontWeight" min="100" max="800" step="1" value="400">
+            <span id="fontWeightValue">400</span><br>
 
-        <label for="fontSize">Font Size:</label>
-        <input type="range" id="fontSize" min="10" max="300" step="1" value="50">
-        <span id="fontSizeValue">50</span><br>
+            <label for="autoPulseWeight">Auto Pulse Weight:</label>
+            <input type="checkbox" id="autoPulseWeight"><br>
 
-        <label for="spaceBetweenWords">Space Between Words:</label>
-        <button id="decreaseSpaceBetweenWords">-</button>
-        <span id="spaceBetweenWordsValue">0</span>
-        <button id="increaseSpaceBetweenWords">+</button><br>
+            <br><Br>
+            <div id="repetitionControls">
+                <label for="numRepetitions">Number of Repetitions:</label>
+                <button id="decreaseRepetitions">-</button>
+                <span id="numRepetitions">1</span>
+                <button id="increaseRepetitions">+</button>
+            </div>
+            <label for="spaceBetweenWords">Space Between Words:</label>
+            <button id="decreaseSpaceBetweenWords">-</button>
+            <span id="spaceBetweenWordsValue">0</span>
+            <button id="increaseSpaceBetweenWords">+</button><br>
 
-        <br><Br>
-        <div id="repetitionControls">
-            <label for="numRepetitions">Number of Repetitions:</label>
-            <button id="decreaseRepetitions">-</button>
-            <span id="numRepetitions">1</span>
-            <button id="increaseRepetitions">+</button>
+            <br>
+            <h4>Colors</h4>
+            <label for="blendModeDropdown">Blend Mode:</label>
+            <select id="blendModeDropdown">
+                <option value="BLEND">Blend</option>
+                <option value="ADD">Add</option>
+                <option value="DARKEST">Darkest</option>
+                <option value="LIGHTEST">Lightest</option>
+                <option value="DIFFERENCE">Difference</option>
+                <option value="EXCLUSION">Exclusion</option>
+                <option value="MULTIPLY">Multiply</option>
+                <option value="SCREEN">Screen</option>
+                <option value="REPLACE">Replace</option>
+            </select><br>
+            <label for="backgroundColor">Background Color:</label>
+            <input type="color" id="backgroundColor" value="#202004"><br>
+
+            <label for="textColor1">Text Color 1:</label>
+            <input type="color" id="textColor1" value="#ed6c44"><br>
+
+            <label for="textColor2">Text Color 2:</label>
+            <input type="color" id="textColor2" value="#e667fc"><br>
+
+            <label for="textColor3">Text Color 3:</label>
+            <input type="color" id="textColor3" value="#3638b1"><br>
         </div>
 
-        <label for="backgroundColor">Background Color:</label>
-        <input type="color" id="backgroundColor" value="#202004"><br>
-
-        <label for="textColor1">Text Color 1:</label>
-        <input type="color" id="textColor1" value="#ed6c44"><br>
-
-        <label for="textColor2">Text Color 2:</label>
-        <input type="color" id="textColor2" value="#e667fc"><br>
-
-        <label for="textColor3">Text Color 3:</label>
-        <input type="color" id="textColor3" value="#3638b1"><br>
-
-        <label for="blendModeDropdown">Blend Mode:</label>
-        <select id="blendModeDropdown">
-            <option value="BLEND">Blend</option>
-            <option value="ADD">Add</option>
-            <option value="DARKEST">Darkest</option>
-            <option value="LIGHTEST">Lightest</option>
-            <option value="DIFFERENCE">Difference</option>
-            <option value="EXCLUSION">Exclusion</option>
-            <option value="MULTIPLY">Multiply</option>
-            <option value="SCREEN">Screen</option>
-            <option value="REPLACE">Replace</option>
-        </select><br>
-
         <!-- Animation Controls -->
-        <h3>Animation</h3>
+        <h3>Animation <button onclick="toggleSection('animationControls')">▼</button></h3>
+        <div id="animationControls">
+            <label for="speed">Speed:</label>
+            <input type="range" id="speed" min="0" max="10" step="0.01" value="1">
+            <span id="speedValue">1</span><br>
 
+            <label for="rotateOnWave">Rotate On Wave:</label>
+            <input type="checkbox" id="rotateOnWave"><br>
 
-        <label for="speed">Speed:</label>
-        <input type="range" id="speed" min="0" max="10" step="0.01" value="1">
-        <span id="speedValue">1</span><br>
+            <label for="reverseAnimation">Reverse Animation:</label>
+            <input type="checkbox" id="reverseAnimation"><br>
+            <label for="stepBetweenWords">Waves Frequency:</label>
+            <input type="range" id="stepBetweenWords" min="0" max="100" step="1" value="30">
+            <span id="stepBetweenWordsValue">30</span><br>
+            <h4>--X Axis--</h4>
 
-        <label for="rotateOnWave">Rotate On Wave:</label>
-        <input type="checkbox" id="rotateOnWave"><br>
+            <label for="waveTypeX">Wave Type:</label>
+            <select id="waveTypeX">
+                <option value="sin">Sin</option>
+                <option value="cos">Cos</option>
+                <option value="tan">Tan</option>
+                <option value="static">Static</option>
+            </select><br>
+            <label for="xPhase">Wave Phase:</label><br>
+            <input type="range" id="xPhase" min="0" max="2" step="0.1" value="0.5">
+            <span id="xPhaseValue">0.5</span><br>
+            <label for="xMagnitude">Wave Magnitude:</label><br>
+            <input type="range" id="xMagnitude" min="0" max="1" step="0.1" value="0.4">
+            <span id="xMagnitudeValue">0.4</span><br>
 
+            <h4>--Y Axis--</h4>
+            <label for="waveTypeY">Wave Type:</label>
+            <select id="waveTypeY">
+                <option value="sin">Sin</option>
+                <option value="cos">Cos</option>
+                <option value="tan">Tan</option>
+                <option value="static">Static</option>
+            </select><br>
+            <label for="yPhase">Wave Phase:</label><br>
+            <input type="range" id="yPhase" min="0" max="2" step="0.1" value="0.5">
+            <span id="yPhaseValue">0.5</span><br>
 
-        <label for="reverseAnimation">Reverse Animation:</label>
-        <input type="checkbox" id="reverseAnimation"><br>
-        <label for="stepBetweenWords">Waves Frequency:</label>
-        <input type="range" id="stepBetweenWords" min="0" max="100" step="1" value="30">
-        <span id="stepBetweenWordsValue">30</span><br>
-        <h4>--X Axis--</h4>
-
-        <label for="waveTypeX">Wave Type:</label>
-        <select id="waveTypeX">
-            <option value="sin">Sin</option>
-            <option value="cos">Cos</option>
-            <option value="tan">Tan</option>
-            <option value="static">Static</option>
-        </select><br>
-        <label for="xPhase">Wave Phase:</label><br>
-        <input type="range" id="xPhase" min="0" max="2" step="0.1" value="0.5">
-        <span id="xPhaseValue">0.5</span><br>
-        <label for="xMagnitude">Wave Magnitude:</label><br>
-        <input type="range" id="xMagnitude" min="0" max="1" step="0.1" value="0.4">
-        <span id="xMagnitudeValue">0.4</span><br>
-
-
-        <h4>--Y Axis--</h4>
-        <label for="waveTypeY">Wave Type:</label>
-        <select id="waveTypeY">
-            <option value="sin">Sin</option>
-            <option value="cos">Cos</option>
-            <option value="tan">Tan</option>
-            <option value="static">Static</option>
-        </select><br>
-        <label for="yPhase">Wave Phase:</label><br>
-        <input type="range" id="yPhase" min="0" max="2" step="0.1" value="0.5">
-        <span id="yPhaseValue">0.5</span><br>
-
-
-        <label for="yMagnitude">Wave Magnitude:</label><br>
-        <input type="range" id="yMagnitude" min="0" max="1" step="0.1" value="0.22">
-        <span id="yMagnitudeValue">0.22</span><br>
-
-
-
-
+            <label for="yMagnitude">Wave Magnitude:</label><br>
+            <input type="range" id="yMagnitude" min="0" max="1" step="0.1" value="0.22">
+            <span id="yMagnitudeValue">0.22</span><br>
+        </div>
 
         <!-- Debug Controls -->
-        <h3>Debug</h3>
-        <label for="showWave">Show Wave:</label>
-        <input type="checkbox" id="showWave" checked><br>
-        <label for="waveDebugColor">Wave Debug Color:</label>
-        <input type="color" id="waveDebugColor" value="#006400"><br>
+        <h3>Debug <button onclick="toggleSection('debugControls')">▼</button></h3>
+        <div id="debugControls">
+            <label for="showWave">Show Wave:</label>
+            <input type="checkbox" id="showWave" checked><br>
+            <label for="waveDebugColor">Wave Debug Color:</label>
+            <input type="color" id="waveDebugColor" value="#006400"><br>
+
+        
+        </div>
+        <br><br><br>
+        <h3>Presets <button onclick="toggleSection('presetControls')">▼</button></h3>
+        <div id="presetControls">
+           
+            <div id="presetContainer"></div>
+            <br><br><br>
+            <button id="savePresetButton">Save Preset</button>
+        </div>
     </div>
+
+ 
 
     <div id="artboard">
         <div id="canvasWrapper"></div>
@@ -212,7 +225,22 @@
         // Initial toggle to set the correct state on page load
         toggleInputs('waveTypeX', 'xPhase', 'xMagnitude');
         toggleInputs('waveTypeY', 'yPhase', 'yMagnitude');
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+            } else {
+                section.style.display = 'none';
+            }
+        }
+
+        // Initialize sections to be visible
+        document.getElementById('textControls').style.display = 'block';
+        document.getElementById('animationControls').style.display = 'block';
+        document.getElementById('debugControls').style.display = 'block';
     </script>
 
 </body>
+
 </html>
