@@ -31,6 +31,8 @@ let currentBlendMode = "BLEND";
 let numRepetitions = 1;
 let waveDebugColor = '#00FF00';
 
+let currentFont = 'Wix Madefor Text';
+
 //=========================================
 
 let padding = 100;
@@ -40,27 +42,12 @@ async function setup() {
     c.parent("canvasWrapper");
     setUpUI();
 
-    // Initialize colors
-    backgroundColor = document.getElementById('backgroundColor').value;
-    textColors[0] = document.getElementById('textColor1').value;
-    textColors[1] = document.getElementById('textColor2').value;
-    textColors[2] = document.getElementById('textColor3').value;
-    waveDebugColor = document.getElementById('waveDebugColor').value;
-
-    // Initialize blend mode
-    const blendModeElement = document.getElementById('blendModeDropdown');
-    currentBlendMode = getBlendMode(blendModeElement.value);
-    blendModeElement.addEventListener('change', function() {
-        currentBlendMode = getBlendMode(this.value);
-    });
-
-    // Add event listener for wave debug color
-    document.getElementById('waveDebugColor').addEventListener('input', function() {
-        waveDebugColor = this.value;
-    });
-
+    // Load both fonts
     await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap');
+    await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Roboto+Flex:ital,wght@0,400..800;1,400..800&display=swap');
+    await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Playwrite+NZ:wght@100..400&display=swap');
 
+    
 }
 
 function windowResized() {
@@ -110,7 +97,9 @@ function drawText() {
     let elementWidth = fontSize;
     let numOfElements = elements.length * numRepetitions;
     let widthSize = width / numOfElements;
-    let couldIndex=0;
+    let couldIndex = 0;
+    const autoPulseWeight = document.getElementById('autoPulseWeight').checked;
+
     drawWaveElements(numOfElements, widthSize, stepBetweenWords, (i) => {
         textSize(elementWidth);
         let element = elements[i % elements.length];
@@ -133,14 +122,22 @@ function drawText() {
         // Calculate the angle of rotation based on the wave
         let angle = -atan2(waveY, waveX);
 
+        // Calculate font weight based on wave position if autoPulseWeight is enabled
+        let currentFontWeight = fontWeight;
+        
+        if (autoPulseWeight) {
+            const t = frameCount / 60 * 1000
+            currentFontWeight = map(sin(t*0.005-i), -1, 1, 200, 800);
+        }
+
         // Apply rotation if rotateOnWave is true
         if (rotateOnWave) {
             rotate(angle);
         }
 
         // Set the font with the current weight and italic values
-        textFont('Wix Madefor Text', {
-            fontVariationSettings: `'wght' ${fontWeight}, 'ital' ${fontItalic}`
+        textFont(currentFont, {
+            fontVariationSettings: `'wght' ${currentFontWeight}`
         });
 
         text(element, 0, 0);
@@ -217,6 +214,32 @@ function calculateWaveValue(angle, magnitude, waveType, index, elementWidth) {
 
 
 function setUpUI() {
+    // Initialize colors
+    backgroundColor = document.getElementById('backgroundColor').value;
+    textColors[0] = document.getElementById('textColor1').value;
+    textColors[1] = document.getElementById('textColor2').value;
+    textColors[2] = document.getElementById('textColor3').value;
+    waveDebugColor = document.getElementById('waveDebugColor').value;
+
+    // Initialize blend mode
+    const blendModeElement = document.getElementById('blendModeDropdown');
+    currentBlendMode = getBlendMode(blendModeElement.value);
+    blendModeElement.addEventListener('change', function() {
+        currentBlendMode = getBlendMode(this.value);
+    });
+
+    // Add event listener for wave debug color
+    document.getElementById('waveDebugColor').addEventListener('input', function() {
+        waveDebugColor = this.value;
+    });
+
+    // Add event listener for font selection
+    const fontSelectionElement = document.getElementById('fontSelection');
+    currentFont = fontSelectionElement.value;
+    fontSelectionElement.addEventListener('change', function() {
+        currentFont = this.value;
+    });
+
     // Wave Controls
     const showWaveElement = document.getElementById('showWave');
     showWave = showWaveElement.checked;
@@ -369,13 +392,20 @@ function setUpUI() {
         document.getElementById('fontWeightValue').textContent = fontWeight;
     });
 
-    // Add event listener for font italic
-    const fontItalicElement = document.getElementById('fontItalic');
-    fontItalic = parseFloat(fontItalicElement.value);
-    fontItalicElement.addEventListener('input', function() {
-        fontItalic = parseFloat(this.value);
-        document.getElementById('fontItalicValue').textContent = fontItalic;
+    // Add event listener for autoPulseWeight
+    const autoPulseWeightElement = document.getElementById('autoPulseWeight');
+    autoPulseWeightElement.addEventListener('change', function() {
+        const isChecked = this.checked;
+        document.getElementById('fontWeight').disabled = isChecked;
     });
+
+    // // Add event listener for font italic
+    // const fontItalicElement = document.getElementById('fontItalic');
+    // fontItalic = parseFloat(fontItalicElement.value);
+    // fontItalicElement.addEventListener('input', function() {
+    //     fontItalic = parseFloat(this.value);
+    //     document.getElementById('fontItalicValue').textContent = fontItalic;
+    // });
 }
 
 function updateElementsArray() {
