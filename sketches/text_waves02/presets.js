@@ -1,42 +1,69 @@
-
 // Dictionary to hold presets with preset name as the key
-const presetsDictionary = {"TEST":{
-    "name": "TEST",
-    "textInput": "STUDIO +++ VIDEO :)",
-    "fontSize": "90",
-    "autoPulseFontSize": false,
-    "fontWeight": "535",
-    "autoPulseWeight": false,
-    "numRepetitions": "10",
-    "spaceBetweenWords": "2",
-    "backgroundColor": "#202004",
-    "textColors": [
-      "#ed6c44",
-      "#e667fc",
-      "#3638b1"
-    ],
-    "speed": "1",
-    "rotateOnWave": false,
-    "reverseAnimation": false,
-    "stepBetweenWords": "8",
-    "waveTypeX": "static",
-    "xPhase": "0.7",
-    "xMagnitude": "0.2",
-    "waveTypeY": "cos",
-    "yPhase": "0.5",
-    "yMagnitude": "0.2",
-    "showWave": false,
-    "waveDebugColor": "#000000"
-  }};
+const presetsDictionary = {
+    "TEST": {
+        "name": "TEST",
+        "textInput": "STUDIO +++ VIDEO :)",
+        "fontSize": "90",
+        "autoPulseFontSize": false,
+        "fontWeight": "535",
+        "autoPulseWeight": false,
+        "numRepetitions": "10",
+        "spaceBetweenWords": "2",
+        "backgroundColor": "#202004",
+        "textColors": [
+            "#ed6c44",
+            "#e667fc",
+            "#3638b1"
+        ],
+        "speed": "1",
+        "rotateOnWave": false,
+        "reverseAnimation": false,
+        "stepBetweenWords": "8",
+        "waveTypeX": "static",
+        "xPhase": "0.7",
+        "xMagnitude": "0.2",
+        "waveTypeY": "cos",
+        "yPhase": "0.5",
+        "yMagnitude": "0.2",
+        "showWave": false,
+        "waveDebugColor": "#000000"
+    }
+};
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    applyPreset("TEST");
+document.addEventListener('DOMContentLoaded', function () {
     updatePresetButtons();
-    document.getElementById('savePresetButton').addEventListener('click', function() {
+    applyPreset("TEST");
+
+    document.getElementById('savePresetButton').addEventListener('click', function () {
         const presetName = prompt("Enter a name for your preset:");
         if (presetName) {
             savePreset(presetName);
+        }
+    });
+
+    document.getElementById('loadPresetButton').addEventListener('click', function () {
+        document.getElementById('presetFileInput').click();
+    });
+
+    document.getElementById('presetFileInput').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const preset = JSON.parse(e.target.result);
+                    if (preset && preset.name) {
+                        addPreset(preset);
+                        applyPreset(preset.name);
+                    } else {
+                        console.error('Invalid preset file');
+                    }
+                } catch (error) {
+                    console.error('Error reading preset file:', error);
+                }
+            };
+            reader.readAsText(file);
         }
     });
 });
@@ -74,7 +101,7 @@ class Preset {
 function addPreset(preset) {
     presetsDictionary[preset.name] = preset;
     updatePresetButtons();
-    
+
     // Log the preset to the console
     console.log(preset.name + ":" + JSON.stringify(preset, null, 2));
 }
@@ -124,6 +151,16 @@ function savePreset(presetName) {
     );
 
     addPreset(preset);
+
+    // Convert preset to JSON and trigger download
+    const presetJSON = JSON.stringify(preset, null, 2);
+    const blob = new Blob([presetJSON], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${presetName}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
 }
 
 
