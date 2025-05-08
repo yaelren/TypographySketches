@@ -49,24 +49,30 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('presetFileInput').click();
     });
 
+    // Update the file input element to allow multiple file selections
+    document.getElementById('presetFileInput').setAttribute('multiple', '');
+
+    // Modify the event listener to handle multiple files
     document.getElementById('presetFileInput').addEventListener('change', function (event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                try {
-                    const preset = JSON.parse(e.target.result);
-                    if (preset && preset.name) {
-                        addPreset(preset);
-                        applyPreset(preset.name);
-                    } else {
-                        console.error('Invalid preset file');
+        const files = event.target.files;
+        if (files.length > 0) {
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    try {
+                        const preset = JSON.parse(e.target.result);
+                        if (preset && preset.name) {
+                            addPreset(preset);
+                            applyPreset(preset.name);
+                        } else {
+                            console.error('Invalid preset file');
+                        }
+                    } catch (error) {
+                        console.error('Error reading preset file:', error);
                     }
-                } catch (error) {
-                    console.error('Error reading preset file:', error);
-                }
-            };
-            reader.readAsText(file);
+                };
+                reader.readAsText(file);
+            });
         }
     });
 
