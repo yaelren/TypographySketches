@@ -16,12 +16,13 @@ let textInput = "hello how are you";
 let fontSize = 50;
 let stepBetweenWords=30;
 let spaceBetweenWords=0;
-let shouldRepeatText = true;
 let elements = [];
 
 // Color Variables
 let backgroundColor = '#000000';
 let textColors = ['#FFFFFF', '#FF0000', '#00FF00'];
+let fontWeight = 400;
+let fontItalic = 0;
 
 // Blend Mode Variable
 let currentBlendMode = "BLEND";
@@ -32,9 +33,9 @@ let waveDebugColor = '#00FF00';
 
 //=========================================
 
-let padding = 170;
+let padding = 100;
 
-function setup() {
+async function setup() {
     var c = createCanvas(windowWidth, windowHeight);
     c.parent("canvasWrapper");
     setUpUI();
@@ -47,7 +48,7 @@ function setup() {
     waveDebugColor = document.getElementById('waveDebugColor').value;
 
     // Initialize blend mode
-    const blendModeElement = document.getElementById('blendMode');
+    const blendModeElement = document.getElementById('blendModeDropdown');
     currentBlendMode = getBlendMode(blendModeElement.value);
     blendModeElement.addEventListener('change', function() {
         currentBlendMode = getBlendMode(this.value);
@@ -57,12 +58,19 @@ function setup() {
     document.getElementById('waveDebugColor').addEventListener('input', function() {
         waveDebugColor = this.value;
     });
+
+    await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap');
+
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
     background(backgroundColor);
     textAlign(CENTER,CENTER);
-    translate(width/2, 0);
+    translate(width/2-padding, 0);
 
     // Apply the current blend mode
     blendMode(BLEND);
@@ -71,26 +79,46 @@ function draw() {
         drawWave();
     }
     drawText();
-    
+    // drawVariableText();
 }
 
+function drawVariableText() {
+    const t = frameCount / 60 * 1000
+    background('#E0018D');
+    noStroke();
+    fill(`rgba(245,100,100,${map(sin(millis() * 0.0025), -1, 1, 0, 1)})`);
+    rect(0, 0, width, height);
+    
+    textAlign(CENTER, CENTER);
+    noStroke();
+    fill('white');
+    textSize(min(width, height) * 0.12);
+    
+    const numRows = 5;
+    for (let row = 0; row < numRows; row++) {
+      const x = width/2;
+      const y = map(row, 0, numRows-1, height*0.25, height*0.75);
+      textFont('Wix Madefor Text', {
+        fontVariationSettings: `wght ${map(sin(t * 0.005 - row), -1, 1, 200, 800)}`
+      });
+    //   console.log(cnv.drawingContext.font)x
+      text('p5*js 2.0', x, y);
+    }
+}
 
 function drawText() {
     let elementWidth = fontSize;
-
-    let numOfElements = elements.length;
-    if (shouldRepeatText) {
-        numOfElements = elements.length * numRepetitions;
-    }
+    let numOfElements = elements.length * numRepetitions;
     let widthSize = width / numOfElements;
-
+    let couldIndex=0;
     drawWaveElements(numOfElements, widthSize, stepBetweenWords, (i) => {
         textSize(elementWidth);
         let element = elements[i % elements.length];
 
         // Set the fill color based on the index
+        fill(textColors[couldIndex % textColors.length]);
         if (element.trim() !== "") {
-            fill(textColors[i % textColors.length]);
+            couldIndex++;
         }
 
         // Apply the current blend mode for each text element
@@ -110,6 +138,11 @@ function drawText() {
             rotate(angle);
         }
 
+        // Set the font with the current weight and italic values
+        textFont('Wix Madefor Text', {
+            fontVariationSettings: `'wght' ${fontWeight}, 'ital' ${fontItalic}`
+        });
+
         text(element, 0, 0);
 
         // Reset rotation
@@ -125,21 +158,21 @@ function drawText() {
 function drawWave() {
     let numOfElements = 200;
     let elementWidth = fontSize;
+    let widthSize = width / numOfElements;
 
-    drawWaveElements(numOfElements, elementWidth, stepBetweenWords, () => {
+    drawWaveElements(numOfElements, widthSize, stepBetweenWords, () => {
         fill(waveDebugColor);
         ellipse(0, 0, elementWidth, elementWidth);
     });
 }
 
 function drawWaveElements(numOfElements, elementWidth, step, drawElement) {
- 
     push();
     let directionMultiplier = reverseAnimation ? -1 : 1;
     let xTranslate = elementWidth / 2;
     let yTranslate = height / 2;
     
-    let shouldPadding= shouldRepeatText ? 0 : 1;
+    let shouldPadding= numRepetitions==1 ? 0 : 1;
     if(waveTypeX === 'static'){
         xTranslate = -width/2+(padding*shouldPadding);
     }
@@ -168,7 +201,6 @@ function drawWaveElements(numOfElements, elementWidth, step, drawElement) {
 
 
 function calculateWaveValue(angle, magnitude, waveType, index, elementWidth) {
-
     switch (waveType) {
         case 'sin':
             return sin(angle) * magnitude;
@@ -254,12 +286,12 @@ function setUpUI() {
         stepBetweenWords = parseInt(this.value, 10);
     });
 
-    const shouldRepeatTextElement = document.getElementById('shouldRepeatText');
-    shouldRepeatText = shouldRepeatTextElement.checked;
-    shouldRepeatTextElement.addEventListener('change', function() {
-        shouldRepeatText = this.checked;
-        document.getElementById('repetitionControls').style.display = this.checked ? 'block' : 'none';
-    });
+    // const shouldRepeatTextElement = document.getElementById('shouldRepeatText');
+    // shouldRepeatText = shouldRepeatTextElement.checked;
+    // shouldRepeatTextElement.addEventListener('change', function() {
+    //     shouldRepeatText = this.checked;
+    //     document.getElementById('repetitionControls').style.display = this.checked ? 'block' : 'none';
+    // });
 
     // Add event listener for reverseAnimation
     const reverseAnimationElement = document.getElementById('reverseAnimation');
@@ -270,13 +302,13 @@ function setUpUI() {
 
     updateElementsArray();
 
-    const spaceBetweenWordsElement = document.getElementById('spaceBetweenWords');
-    spaceBetweenWords = parseInt(spaceBetweenWordsElement.value, 10);
-    updateElementsArray();
-    spaceBetweenWordsElement.addEventListener('input', function() {
-        spaceBetweenWords = parseInt(this.value, 10);
-        updateElementsArray();
-    });
+    // const spaceBetweenWordsElement = document.getElementById('spaceBetweenWords');
+    // spaceBetweenWords = parseInt(spaceBetweenWordsElement.value, 10);
+    // updateElementsArray();
+    // spaceBetweenWordsElement.addEventListener('input', function() {
+    //     spaceBetweenWords = parseInt(this.value, 10);
+    //     updateElementsArray();
+    // });
 
     const rotateOnWaveElement = document.getElementById('rotateOnWave');
     rotateOnWave = rotateOnWaveElement.checked;
@@ -312,6 +344,37 @@ function setUpUI() {
 
     document.getElementById('textColor3').addEventListener('input', function() {
         textColors[2] = this.value;
+    });
+
+    // Space Between Words controls
+    document.getElementById('increaseSpaceBetweenWords').addEventListener('click', function() {
+        spaceBetweenWords++;
+        document.getElementById('spaceBetweenWordsValue').textContent = spaceBetweenWords;
+        updateElementsArray();
+    });
+
+    document.getElementById('decreaseSpaceBetweenWords').addEventListener('click', function() {
+        if (spaceBetweenWords > 0) {
+            spaceBetweenWords--;
+            document.getElementById('spaceBetweenWordsValue').textContent = spaceBetweenWords;
+            updateElementsArray();
+        }
+    });
+
+    // Add event listener for font weight
+    const fontWeightElement = document.getElementById('fontWeight');
+    fontWeight = parseInt(fontWeightElement.value, 10);
+    fontWeightElement.addEventListener('input', function() {
+        fontWeight = parseInt(this.value, 10);
+        document.getElementById('fontWeightValue').textContent = fontWeight;
+    });
+
+    // Add event listener for font italic
+    const fontItalicElement = document.getElementById('fontItalic');
+    fontItalic = parseFloat(fontItalicElement.value);
+    fontItalicElement.addEventListener('input', function() {
+        fontItalic = parseFloat(this.value);
+        document.getElementById('fontItalicValue').textContent = fontItalic;
     });
 }
 

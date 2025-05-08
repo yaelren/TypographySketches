@@ -1,85 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Waves Sketch</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@2.0.1/lib/p5.js"></script>
+    <script src="googleFonts.js"></script>
+    <script src="text_waves02.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <div id="ui">
-        <!-- Typography Controls -->
+
+        <!-- Text Controls -->
+        <h3>Text</h3>
         <label for="textInput">Text Input:</label>
         <br>
         <textarea id="textInput" rows="4" cols="50">hello how are you</textarea><br>
 
- 
-
-        <label for="speed">Speed:</label>
-        <input type="range" id="speed" min="0" max="10" step="0.01" value="1">
-        <span id="speedValue">1</span><br>
-
-        <label for="xPhase">X Phase:</label>
-        <input type="range" id="xPhase" min="0" max="2" step="0.1" value="0.5">
-        <span id="xPhaseValue">0.5</span><br>
-
-        <label for="yPhase">Y Phase:</label>
-        <input type="range" id="yPhase" min="0" max="2" step="0.1" value="0.5">
-        <span id="yPhaseValue">0.5</span><br>
-
-        <label for="xMagnitude">X Magnitude:</label>
-        <input type="range" id="xMagnitude" min="0" max="1" step="0.1" value="0.4">
-        <span id="xMagnitudeValue">0.4</span><br>
-
-        <label for="yMagnitude">Y Magnitude:</label>
-        <input type="range" id="yMagnitude" min="0" max="1" step="0.1" value="0.22">
-        <span id="yMagnitudeValue">0.22</span><br>
-
-        <label for="waveTypeX">Wave Type X:</label>
-        <select id="waveTypeX">
-            <option value="sin">Sin</option>
-            <option value="cos">Cos</option>
-            <option value="tan">Tan</option>
-            <option value="static">Static</option>
-        </select><br>
-
-        <label for="waveTypeY">Wave Type Y:</label>
-        <select id="waveTypeY">
-            <option value="sin">Sin</option>
-            <option value="cos">Cos</option>
-            <option value="tan">Tan</option>
-            <option value="static">Static</option>
-        </select><br>
 
         <label for="fontSize">Font Size:</label>
-        <input type="range" id="fontSize" min="10" max="200" step="1" value="50">
+        <input type="range" id="fontSize" min="10" max="300" step="1" value="50">
         <span id="fontSizeValue">50</span><br>
 
-        <label for="stepBetweenWords">Wave Step:</label>
-        <input type="range" id="stepBetweenWords" min="0" max="100" step="1" value="30">
-        <span id="stepBetweenWordsValue">30</span><br>
-
         <label for="spaceBetweenWords">Space Between Words:</label>
-        <input type="range" id="spaceBetweenWords" min="0" max="50" step="1" value="0">
-        <span id="spaceBetweenWordsValue">0</span><br>
+        <button id="decreaseSpaceBetweenWords">-</button>
+        <span id="spaceBetweenWordsValue">0</span>
+        <button id="increaseSpaceBetweenWords">+</button><br>
 
-
-        <label for="shouldRepeatText">Repeat Text:</label>
-        <input type="checkbox" id="shouldRepeatText"><br>
-        <!-- Add this inside the <div id="ui">, below the Repeat Text checkbox -->
-        <div id="repetitionControls" style="display: none;">
+        <div id="repetitionControls">
             <label for="numRepetitions">Number of Repetitions:</label>
             <button id="decreaseRepetitions">-</button>
             <span id="numRepetitions">1</span>
             <button id="increaseRepetitions">+</button>
         </div>
 
-        <!-- New Rotate On Wave Control -->
-        <label for="rotateOnWave">Rotate On Wave:</label>
-        <input type="checkbox" id="rotateOnWave" ><br>
-
-        <!-- New Reverse Animation Control -->
-        <label for="reverseAnimation">Reverse Animation:</label>
-        <input type="checkbox" id="reverseAnimation"><br>
-
-        <!-- Add these inside the <div id="ui"> -->
         <label for="backgroundColor">Background Color:</label>
         <input type="color" id="backgroundColor" value="#202004"><br>
 
@@ -92,9 +49,8 @@
         <label for="textColor3">Text Color 3:</label>
         <input type="color" id="textColor3" value="#3638b1"><br>
 
-        <!-- Add this inside the <div id="ui"> -->
-        <label for="blendMode">Blend Mode:</label>
-        <select id="blendMode">
+        <label for="blendModeDropdown">Blend Mode:</label>
+        <select id="blendModeDropdown">
             <option value="BLEND">Blend</option>
             <option value="ADD">Add</option>
             <option value="DARKEST">Darkest</option>
@@ -106,23 +62,82 @@
             <option value="REPLACE">Replace</option>
         </select><br>
 
-        <!-- Add this inside the <div id="ui"> -->
-                   <!-- Wave Controls -->
+        <!-- Font Controls -->
+        <h3>Font Controls</h3>
+        <label for="fontWeight">Font Weight:</label>
+        <input type="range" id="fontWeight" min="400" max="800" step="1" value="400">
+        <span id="fontWeightValue">400</span><br>
+
+        <label for="fontItalic">Font Italic:</label>
+        <input type="range" id="fontItalic" min="0" max="1" step="0.01" value="0">
+        <span id="fontItalicValue">0</span><br>
+
+        <!-- Animation Controls -->
+        <h3>Animation</h3>
+
+
+        <label for="speed">Speed:</label>
+        <input type="range" id="speed" min="0" max="10" step="0.01" value="1">
+        <span id="speedValue">1</span><br>
+
+        <label for="rotateOnWave">Rotate On Wave:</label>
+        <input type="checkbox" id="rotateOnWave"><br>
+
+
+        <label for="reverseAnimation">Reverse Animation:</label>
+        <input type="checkbox" id="reverseAnimation"><br>
+        <label for="stepBetweenWords">Waves Frequency:</label>
+        <input type="range" id="stepBetweenWords" min="0" max="100" step="1" value="30">
+        <span id="stepBetweenWordsValue">30</span><br>
+        <h4>--X Axis--</h4>
+
+        <label for="waveTypeX">Wave Type:</label>
+        <select id="waveTypeX">
+            <option value="sin">Sin</option>
+            <option value="cos">Cos</option>
+            <option value="tan">Tan</option>
+            <option value="static">Static</option>
+        </select><br>
+        <label for="xPhase">Wave Phase:</label><br>
+        <input type="range" id="xPhase" min="0" max="2" step="0.1" value="0.5">
+        <span id="xPhaseValue">0.5</span><br>
+        <label for="xMagnitude">Wave Magnitude:</label><br>
+        <input type="range" id="xMagnitude" min="0" max="1" step="0.1" value="0.4">
+        <span id="xMagnitudeValue">0.4</span><br>
+
+
+        <h4>--Y Axis--</h4>
+        <label for="waveTypeY">Wave Type:</label>
+        <select id="waveTypeY">
+            <option value="sin">Sin</option>
+            <option value="cos">Cos</option>
+            <option value="tan">Tan</option>
+            <option value="static">Static</option>
+        </select><br>
+        <label for="yPhase">Wave Phase:</label><br>
+        <input type="range" id="yPhase" min="0" max="2" step="0.1" value="0.5">
+        <span id="yPhaseValue">0.5</span><br>
+
+
+        <label for="yMagnitude">Wave Magnitude:</label><br>
+        <input type="range" id="yMagnitude" min="0" max="1" step="0.1" value="0.22">
+        <span id="yMagnitudeValue">0.22</span><br>
+
+
+
+
+
+        <!-- Debug Controls -->
+        <h3>Debug</h3>
         <label for="showWave">Show Wave:</label>
         <input type="checkbox" id="showWave" checked><br>
         <label for="waveDebugColor">Wave Debug Color:</label>
         <input type="color" id="waveDebugColor" value="#006400"><br>
-
     </div>
 
     <div id="artboard">
         <div id="canvasWrapper"></div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
-
-    <script src="./text_waves02.js"></script>
-    <script src="./easing.js"></script>
 
     <script>
         // Function to update the value display
@@ -163,9 +178,9 @@
             updateValueDisplay('fontSize', this.value);
         });
 
-        document.getElementById('spaceBetweenWords').addEventListener('input', function() {
-            updateValueDisplay('spaceBetweenWords', this.value);
-        });
+        // document.getElementById('spaceBetweenWords').addEventListener('input', function () {
+        //     updateValueDisplay('spaceBetweenWords', this.value);
+        // });
 
         document.getElementById('stepBetweenWords').addEventListener('input', function () {
             updateValueDisplay('stepBetweenWords', this.value);
@@ -180,11 +195,6 @@
             toggleInputs('waveTypeY', 'yPhase', 'yMagnitude');
         });
 
-        // // Add event listener for rotateOnWave
-        // document.getElementById('rotateOnWave').addEventListener('change', function () {
-        //     rotateOnWave = this.checked;
-        // });
-
         // Add event listener for reverseAnimation
         const reverseAnimationElement = document.getElementById('reverseAnimation');
         reverseAnimation = reverseAnimationElement.checked;
@@ -198,3 +208,4 @@
     </script>
 
 </body>
+</html>
