@@ -490,6 +490,10 @@ function updateSketchVariables() {
     yMagnitude = parseFloat(document.getElementById('yMagnitude').value);
     showWave = document.getElementById('showWave').checked;
     waveDebugColor = document.getElementById('waveDebugColor').value;
+    
+    // Add blend mode and font updates
+    currentBlendMode = getBlendMode(document.getElementById('blendModeDropdown').value);
+    currentFont = document.getElementById('fontSelection').value;
 
     // Update elements array
     updateElementsArray();
