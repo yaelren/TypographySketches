@@ -60,6 +60,36 @@ const presetsDictionary = {
         "currentBlendMode": "DIFFERENCE",
         "currentFont": "Wix Madefor Text"
     },
+    "Sin Wave": {
+        "name": "Sin Wave",
+        "textInput": "*****.wix.*****",
+        "fontSize": "60",
+        "autoPulseFontSize": false,
+        "fontWeight": "470",
+        "autoPulseWeight": false,
+        "numRepetitions": "138",
+        "spaceBetweenWords": "0",
+        "backgroundColor": "#d8fdde",
+        "textColors": [
+            "#c875ff",
+            "#00c732",
+            "#56165a"
+        ],
+        "speed": "6.32",
+        "rotateOnWave": false,
+        "reverseAnimation": false,
+        "stepBetweenWords": "8",
+        "waveTypeX": "static",
+        "xPhase": "0.2",
+        "xMagnitude": "0.3",
+        "waveTypeY": "sin",
+        "yPhase": "0.1",
+        "yMagnitude": "0.4",
+        "showWave": false,
+        "waveDebugColor": "#c9f454",
+        "currentBlendMode": "BLEND",
+        "currentFont": "Roboto Flex"
+    },
     "Bouncing Trails": {
         "name": "Bouncing Trails",
         "textInput": "good morning ",
@@ -102,9 +132,9 @@ const presetsDictionary = {
         "spaceBetweenWords": "2",
         "backgroundColor": "#000000",
         "textColors": [
+            "#ce1c1c",
             "#ffffff",
-            "#ffffff",
-            "#ffffff"
+            "#0400ff"
         ],
         "speed": "1.66",
         "rotateOnWave": true,
@@ -220,7 +250,7 @@ const presetsDictionary = {
 document.addEventListener('DOMContentLoaded', function () {
     // First set up all UI elements and event listeners
     updatePresetButtons();
-    
+
     // Set up the shuffle button event listener
     document.getElementById('shuffleButton').addEventListener('click', shufflePreset);
 
@@ -379,17 +409,17 @@ function applyPreset(presetName, preset = null) {
 
     if (preset) {
         document.getElementById('textInput').value = preset.textInput;
-        
+
         // Update font size and its display
         document.getElementById('fontSize').value = preset.fontSize;
         document.getElementById('fontSizeValue').textContent = preset.fontSize;
-        
+
         document.getElementById('autoPulseFontSize').checked = preset.autoPulseFontSize;
-        
+
         // Update font weight and its display
         document.getElementById('fontWeight').value = preset.fontWeight;
         document.getElementById('fontWeightValue').textContent = preset.fontWeight;
-        
+
         document.getElementById('autoPulseWeight').checked = preset.autoPulseWeight;
         document.getElementById('numRepetitions').textContent = preset.numRepetitions;
         document.getElementById('spaceBetweenWordsValue').textContent = preset.spaceBetweenWords;
@@ -397,38 +427,38 @@ function applyPreset(presetName, preset = null) {
         document.getElementById('textColor1').value = preset.textColors[0];
         document.getElementById('textColor2').value = preset.textColors[1];
         document.getElementById('textColor3').value = preset.textColors[2];
-        
+
         // Update speed and its display
         document.getElementById('speed').value = preset.speed;
         document.getElementById('speedValue').textContent = preset.speed;
-        
+
         document.getElementById('rotateOnWave').checked = preset.rotateOnWave;
         document.getElementById('reverseAnimation').checked = preset.reverseAnimation;
-        
+
         // Update step between words and its display
         document.getElementById('stepBetweenWords').value = preset.stepBetweenWords;
         document.getElementById('stepBetweenWordsValue').textContent = preset.stepBetweenWords;
-        
+
         document.getElementById('waveTypeX').value = preset.waveTypeX;
-        
+
         // Update X phase and its display
         document.getElementById('xPhase').value = preset.xPhase;
         document.getElementById('xPhaseValue').textContent = preset.xPhase;
-        
+
         // Update X magnitude and its display
         document.getElementById('xMagnitude').value = preset.xMagnitude;
         document.getElementById('xMagnitudeValue').textContent = preset.xMagnitude;
-        
+
         document.getElementById('waveTypeY').value = preset.waveTypeY;
-        
+
         // Update Y phase and its display
         document.getElementById('yPhase').value = preset.yPhase;
         document.getElementById('yPhaseValue').textContent = preset.yPhase;
-        
+
         // Update Y magnitude and its display
         document.getElementById('yMagnitude').value = preset.yMagnitude;
         document.getElementById('yMagnitudeValue').textContent = preset.yMagnitude;
-        
+
         document.getElementById('showWave').checked = preset.showWave;
         document.getElementById('waveDebugColor').value = preset.waveDebugColor;
         document.getElementById('blendModeDropdown').value = preset.currentBlendMode || 'BLEND';
