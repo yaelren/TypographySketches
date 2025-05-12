@@ -16,7 +16,7 @@ let rotateWithFlow = false;
 let textInput = "hello how are you";
 let fontSize = 50;
 let stepBetweenWords=30;
-let spaceBetweenWords=0;
+let spaceBetweenElements = 0;
 let elements = [];
 
 // Color Variables
@@ -36,9 +36,15 @@ let autoPulseFontSize = false;
 
 let currentFont = 'Wix Madefor Text';
 
+// Add this with other UI variables at the top
+let textSplitMode = 'word';
+
+// Add this with other UI variables at the top
+let debugWaveType = 'circle';
+
 //=========================================
 
-let padding = 100;
+let padding = 280;
 
 async function setup() {
     var c = createCanvas(windowWidth, windowHeight);
@@ -100,7 +106,10 @@ function drawText() {
     let elementWidth = fontSize;
     let numOfElements = elements.length * numRepetitions;
     let widthSize = width / numOfElements;
-    let couldIndex = 0;
+    // if(textSplitMode === 'sentence'){
+    //     widthSize = width;
+    // }
+    let colorIndex = 0;
     const autoPulseWeight = document.getElementById('autoPulseWeight').checked;
 
     drawWaveElements(numOfElements, widthSize, stepBetweenWords, (i) => {
@@ -114,10 +123,16 @@ function drawText() {
         textSize(currentFontSize);
         let element = elements[i % elements.length];
 
+        // // For sentence mode, we need to adjust the spacing
+        if (textSplitMode === 'sentence') {
+            // Use the entire width for the sentence
+            textAlign(CENTER,CENTER);
+        }
+
         // Set the fill color based on the index
-        fill(textColors[couldIndex % textColors.length]);
+        fill(textColors[colorIndex % textColors.length]);
         if (element.trim() !== "") {
-            couldIndex++;
+            colorIndex++;
         }
 
         // Apply the current blend mode for each text element
@@ -177,7 +192,43 @@ function drawWave() {
 
     drawWaveElements(numOfElements, widthSize, stepBetweenWords, () => {
         fill(waveDebugColor);
-        ellipse(0, 0, elementWidth, elementWidth);
+        // Use different shapes based on debugWaveType
+        switch(debugWaveType) {
+            case 'circle':
+                ellipse(0, 0, elementWidth, elementWidth);
+                break;
+            case 'square':
+                rect(-elementWidth/2, -elementWidth/2, elementWidth, elementWidth);
+                break;
+            case 'triangle':
+                triangle(
+                    -elementWidth/2, elementWidth/2,
+                    elementWidth/2, elementWidth/2,
+                    0, -elementWidth/2
+                );
+                break;
+            case 'line':
+                stroke(waveDebugColor);
+                strokeWeight(10);
+                line(-elementWidth/2, 0, elementWidth/2, 0);
+                break;
+            case 'cross':
+                stroke(waveDebugColor);
+                strokeWeight(10);
+                line(-elementWidth/2, 0, elementWidth/2, 0);
+                line(0, -elementWidth/2, 0, elementWidth/2);
+                break;
+            case 'rhombus':
+                quad(
+                    0, -elementWidth/4,           // top
+                    elementWidth/2, 0,           // right
+                    0, elementWidth/4,           // bottom
+                    -elementWidth/2, 0           // left
+                );
+                break;
+            default:
+                ellipse(0, 0, elementWidth, elementWidth);
+        }
     });
 }
 
@@ -187,12 +238,12 @@ function drawWaveElements(numOfElements, elementWidth, step, drawElement) {
     let xTranslate = elementWidth / 2;
     let yTranslate = height / 2;
     
-    let shouldPadding= numRepetitions==1 ? 0 : 1;
+    let shouldPadding= numRepetitions==1 ? 1 : 1;
     if(waveTypeX === 'static'){
-        xTranslate = -width/2+(padding*shouldPadding);
+        xTranslate = -width/2+(padding);
     }
     if(waveTypeY === 'static'){
-        yTranslate = -height/2+(padding*shouldPadding*5);
+        yTranslate = -height/2+(padding*2);
     }
     translate(xTranslate, yTranslate);
     noStroke();
@@ -405,15 +456,15 @@ function setUpUI() {
 
     // Space Between Words controls
     document.getElementById('increaseSpaceBetweenWords').addEventListener('click', function() {
-        spaceBetweenWords++;
-        document.getElementById('spaceBetweenWordsValue').textContent = spaceBetweenWords;
+        spaceBetweenElements++;
+        document.getElementById('spaceBetweenWordsValue').textContent = spaceBetweenElements;
         updateElementsArray();
     });
 
     document.getElementById('decreaseSpaceBetweenWords').addEventListener('click', function() {
-        if (spaceBetweenWords > 0) {
-            spaceBetweenWords--;
-            document.getElementById('spaceBetweenWordsValue').textContent = spaceBetweenWords;
+        if (spaceBetweenElements > 0) {
+            spaceBetweenElements--;
+            document.getElementById('spaceBetweenWordsValue').textContent = spaceBetweenElements;
             updateElementsArray();
         }
     });
@@ -448,21 +499,56 @@ function setUpUI() {
         autoPulseFontSize = this.checked;
         document.getElementById('fontSize').disabled = autoPulseFontSize;
     });
+
+    // Add event listener for text split mode
+    const textSplitModeElement = document.getElementById('textSplitMode');
+    textSplitMode = textSplitModeElement.value;
+    textSplitModeElement.addEventListener('change', function() {
+        textSplitMode = this.value;
+        updateElementsArray();
+    });
+
+    // Add event listener for debug wave type
+    const debugWaveTypeElement = document.getElementById('debugWaveType');
+    debugWaveType = debugWaveTypeElement.value;
+    debugWaveTypeElement.addEventListener('change', function() {
+        debugWaveType = this.value;
+    });
 }
 
 function updateElementsArray() {
-    let words = textInput.split(" ");
-    elements = [];
-
-    // Build the list of elements to draw, including spaces
-    words.forEach((word, index) => {
-        elements.push(word);
-        if (index < words.length) { //  add spaces after the last word
-            for (let i = 0; i < spaceBetweenWords; i++) {
-                elements.push(" ");
-            }
-        }
-    });
+    switch(textSplitMode) {
+        case 'sentence':
+            // For sentence mode, we don't need to add spaces since it's one element
+            elements = [textInput];
+            break;
+        case 'word':
+            // Split by words and add spaces between them
+            let words = textInput.split(" ");
+            elements = [];
+            words.forEach((word, index) => {
+                elements.push(word);
+                if (index < words.length) { // Don't add spaces after the last word
+                    for (let i = 0; i < spaceBetweenElements; i++) {
+                        elements.push(" ");
+                    }
+                }
+            });
+            break;
+        case 'char':
+            // Split into individual characters and add spaces between them
+            let chars = textInput.split("");
+            elements = [];
+            chars.forEach((char, index) => {
+                elements.push(char);
+                if (index < chars.length) { // Don't add spaces after the last character
+                    for (let i = 0; i < spaceBetweenElements; i++) {
+                        elements.push(" ");
+                    }
+                }
+            });
+            break;
+    }
 }
 
 // Function to map blend mode string to p5.js constant
@@ -497,7 +583,7 @@ function updateSketchVariables() {
     fontWeight = parseInt(document.getElementById('fontWeight').value, 10);
     autoPulseWeight = document.getElementById('autoPulseWeight').checked;
     numRepetitions = parseInt(document.getElementById('numRepetitions').textContent, 10);
-    spaceBetweenWords = parseInt(document.getElementById('spaceBetweenWordsValue').textContent, 10);
+    spaceBetweenElements = parseInt(document.getElementById('spaceBetweenWordsValue').textContent, 10);
     backgroundColor = document.getElementById('backgroundColor').value;
     textColors = [
         document.getElementById('textColor1').value,
@@ -506,6 +592,7 @@ function updateSketchVariables() {
     ];
     speed = parseFloat(document.getElementById('speed').value);
     rotateWithPosition = document.getElementById('rotateWithPosition').checked;
+    rotateWithFlow = document.getElementById('rotateWithFlow').checked;
     reverseAnimation = document.getElementById('reverseAnimation').checked;
     stepBetweenWords = parseInt(document.getElementById('stepBetweenWords').value, 10);
     waveTypeX = document.getElementById('waveTypeX').value;
@@ -516,10 +603,14 @@ function updateSketchVariables() {
     yMagnitude = parseFloat(document.getElementById('yMagnitude').value);
     showWave = document.getElementById('showWave').checked;
     waveDebugColor = document.getElementById('waveDebugColor').value;
+    debugWaveType = document.getElementById('debugWaveType').value;
     
     // Add blend mode and font updates
     currentBlendMode = getBlendMode(document.getElementById('blendModeDropdown').value);
     currentFont = document.getElementById('fontSelection').value;
+    
+    // Add text split mode update
+    textSplitMode = document.getElementById('textSplitMode').value;
 
     // Update elements array
     updateElementsArray();

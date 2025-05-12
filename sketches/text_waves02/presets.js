@@ -29,7 +29,8 @@ const presetsDictionary = {
         "showWave": false,
         "waveDebugColor": "#002e0e",
         "currentBlendMode": "BLEND",
-        "currentFont": "Wix Madefor Text"
+        "currentFont": "Wix Madefor Text",
+        "textSplitMode": "word"
     },
     "Blend Modes": {
         "name": "Blend Modes",
@@ -60,22 +61,23 @@ const presetsDictionary = {
         "showWave": false,
         "waveDebugColor": "#b9005c",
         "currentBlendMode": "DIFFERENCE",
-        "currentFont": "Wix Madefor Text"
+        "currentFont": "Wix Madefor Text",
+        "textSplitMode": "word"
     },
     "Sin Wave": {
         "name": "Sin Wave",
-        "textInput": "*****.wix.*****",
+        "textInput": "***** wix *****",
         "fontSize": "60",
         "autoPulseFontSize": false,
         "fontWeight": "470",
         "autoPulseWeight": false,
-        "numRepetitions": "138",
+        "numRepetitions": "105",
         "spaceBetweenWords": "0",
         "backgroundColor": "#d8fdde",
         "textColors": [
-            "#c875ff",
-            "#00c732",
-            "#56165a"
+          "#c875ff",
+          "#00c732",
+          "#56165a"
         ],
         "speed": "6.32",
         "rotateWithPosition": false,
@@ -91,7 +93,8 @@ const presetsDictionary = {
         "showWave": false,
         "waveDebugColor": "#c9f454",
         "currentBlendMode": "BLEND",
-        "currentFont": "Roboto Flex"
+        "currentFont": "Roboto Flex",
+        "textSplitMode": "sentence"
     },
     "Bouncing Trails": {
         "name": "Bouncing Trails",
@@ -122,7 +125,8 @@ const presetsDictionary = {
         "showWave": false,
         "waveDebugColor": "#b9005c",
         "currentBlendMode": "ADD",
-        "currentFont": "Wix Madefor Text"
+        "currentFont": "Wix Madefor Text",
+        "textSplitMode": "word"
     },
     "Spiral Pattern":
     {
@@ -154,7 +158,8 @@ const presetsDictionary = {
         "showWave": false,
         "waveDebugColor": "#88582c",
         "currentBlendMode": "SCREEN",
-        "currentFont": "Playwrite NZ"
+        "currentFont": "Playwrite NZ",
+        "textSplitMode": "word"
     },
     "Drop": {
         "name": "Drop",
@@ -185,7 +190,8 @@ const presetsDictionary = {
         "showWave": false,
         "waveDebugColor": "#88582c",
         "currentBlendMode": "BLEND",
-        "currentFont": "Roboto Flex"
+        "currentFont": "Roboto Flex",
+        "textSplitMode": "word"
     },
     "Ring Masked":
     {
@@ -217,7 +223,8 @@ const presetsDictionary = {
         "showWave": true,
         "waveDebugColor": "#a6ff00",
         "currentBlendMode": "DARKEST",
-        "currentFont": "Wix Madefor Text"
+        "currentFont": "Wix Madefor Text",
+        "textSplitMode": "word"
     },
     "Tan Swipe": {
         "name": "Tan Swipe",
@@ -248,8 +255,42 @@ const presetsDictionary = {
         "showWave": true,
         "waveDebugColor": "#89982f",
         "currentBlendMode": "SCREEN",
-        "currentFont": "Wix Madefor Text"
-    }
+        "currentFont": "Wix Madefor Text",
+        "textSplitMode": "word"
+    },
+    "Sliding Squares":{
+        "name": "Sliding Squares",
+        "textInput": "STUDIO\nVIDEO",
+        "fontSize": "300",
+        "autoPulseFontSize": false,
+        "fontWeight": "176",
+        "autoPulseWeight": false,
+        "numRepetitions": "15",
+        "spaceBetweenWords": "5",
+        "backgroundColor": "#39c952",
+        "textColors": [
+          "#b5b5b5",
+          "#dba800",
+          "#acdaa4"
+        ],
+        "speed": "0.08",
+        "rotateWithPosition": false,
+        "rotateWithFlow": false,
+        "reverseAnimation": false,
+        "stepBetweenWords": "25",
+        "waveTypeX": "cos",
+        "xPhase": "2",
+        "xMagnitude": "0.9",
+        "waveTypeY": "static",
+        "yPhase": "2",
+        "yMagnitude": "0.4",
+        "showWave": true,
+        "waveDebugColor": "#ea03d4",
+        "currentBlendMode": "SCREEN",
+        "currentFont": "Roboto Flex",
+        "textSplitMode": "word",
+        "debugWaveType": "square"
+      }
 
 
 };
@@ -308,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 class Preset {
-    constructor(name, textInput, fontSize, autoPulseFontSize, fontWeight, autoPulseWeight, numRepetitions, spaceBetweenWords, backgroundColor, textColors, speed, rotateWithPosition, rotateWithFlow, reverseAnimation, stepBetweenWords, waveTypeX, xPhase, xMagnitude, waveTypeY, yPhase, yMagnitude, showWave, waveDebugColor, currentBlendMode, currentFont) {
+    constructor(name, textInput, fontSize, autoPulseFontSize, fontWeight, autoPulseWeight, numRepetitions, spaceBetweenWords, backgroundColor, textColors, speed, rotateWithPosition, rotateWithFlow, reverseAnimation, stepBetweenWords, waveTypeX, xPhase, xMagnitude, waveTypeY, yPhase, yMagnitude, showWave, waveDebugColor, currentBlendMode, currentFont, textSplitMode, debugWaveType) {
         this.name = name;
         this.textInput = textInput;
         this.fontSize = fontSize;
@@ -334,6 +375,8 @@ class Preset {
         this.waveDebugColor = waveDebugColor;
         this.currentBlendMode = currentBlendMode;
         this.currentFont = currentFont;
+        this.textSplitMode = textSplitMode || 'word';
+        this.debugWaveType = debugWaveType || 'circle';
     }
 }
 
@@ -394,7 +437,9 @@ function savePreset(presetName) {
         document.getElementById('showWave').checked,
         document.getElementById('waveDebugColor').value,
         document.getElementById('blendModeDropdown').value,
-        document.getElementById('fontSelection').value
+        document.getElementById('fontSelection').value,
+        document.getElementById('textSplitMode').value,
+        document.getElementById('debugWaveType').value
     );
 
     addPreset(preset);
@@ -474,6 +519,8 @@ function applyPreset(presetName, preset = null) {
         document.getElementById('waveDebugColor').value = preset.waveDebugColor;
         document.getElementById('blendModeDropdown').value = preset.currentBlendMode || 'BLEND';
         document.getElementById('fontSelection').value = preset.currentFont || 'Wix Madefor Text';
+        document.getElementById('textSplitMode').value = preset.textSplitMode || 'word';
+        document.getElementById('debugWaveType').value = preset.debugWaveType || 'circle';
 
         // Update the sketch variables
         updateSketchVariables();
@@ -488,6 +535,42 @@ function applyPreset(presetName, preset = null) {
 
 function shufflePreset() {
     console.log("Shuffling preset");
+    const textSplitMode = ["sentence", "word", "char"][Math.floor(Math.random() * 3)];
+    const spaceBetweenWords = textSplitMode === 'char' 
+        ? Math.floor(Math.random() * 3) // 0 to 2 for char mode
+        : Math.floor(Math.random() * 10); // 0 to 9 for other modes
+
+    // Select wave types first
+    const waveTypeX = ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)];
+    const waveTypeY = ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)];
+    
+    // Check if either wave type is tan or static
+    const hasTanWave = waveTypeX === 'tan' || waveTypeY === 'tan';
+    const hasStaticWave = waveTypeX === 'static' || waveTypeY === 'static';
+    
+    // Adjust repetitions based on wave types
+    let numRepetitions;
+    if (hasTanWave) {
+        numRepetitions = Math.floor(Math.random() * 7) + 4;  // 4 to 10 repetitions for tan
+    } else if (hasStaticWave) {
+        numRepetitions = Math.floor(Math.random() * 6) + 5;  // 5 to 10 repetitions for static
+    } else {
+        numRepetitions = Math.floor(Math.random() * 10) + 1; // 1 to 10 repetitions for others
+    }
+    
+    const speed = hasTanWave
+        ? (Math.random() * 0.9).toFixed(2)  // 0 to 0.9 for tan
+        : (Math.random() * 2).toFixed(2);   // 0 to 2 for others
+
+    // Adjust phase values based on text split mode
+    const xPhase = textSplitMode === 'char'
+        ? (Math.random() * 20).toFixed(1)  // 0 to 20 for char mode
+        : (Math.random() * 2).toFixed(1);  // 0 to 2 for other modes
+    
+    const yPhase = textSplitMode === 'char'
+        ? (Math.random() * 20).toFixed(1)  // 0 to 20 for char mode
+        : (Math.random() * 2).toFixed(1);  // 0 to 2 for other modes
+
     const randomPreset = new Preset(
         "Random", // Preset name
         document.getElementById('textInput').value, // Keep current text input
@@ -495,29 +578,31 @@ function shufflePreset() {
         0, // Disable auto pulse font size
         Math.floor(Math.random() * 701) + 100, // Random font weight between 100 and 800
         0, // Disable auto pulse weight
-        Math.floor(Math.random() * 10) + 1, // Random number of repetitions between 1 and 10
-        Math.floor(Math.random() * 10), // Random space between words between 0 and 9
+        numRepetitions, // Use adjusted repetitions
+        spaceBetweenWords, // Space between words with restriction for char mode
         `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Random background color
         [
             `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Random text color 1
             `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Random text color 2
             `#${Math.floor(Math.random() * 16777215).toString(16)}`  // Random text color 3
         ],
-        (Math.random() * 2).toFixed(2), // Random speed between 0 and 5
+        speed, // Use adjusted speed
         Math.random() < 0.5, // Random boolean for rotate with position
         Math.random() < 0.5, // Random boolean for rotate with flow
         Math.random() < 0.5, // Random boolean for reverse animation
         Math.floor(Math.random() * 101), // Random step between words between 0 and 100
-        ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)], // Random X wave type
-        (Math.random() * 2).toFixed(1), // Random X phase between 0 and 2
+        waveTypeX, // Use selected X wave type
+        xPhase, // Use adjusted X phase
         (Math.random() * 1).toFixed(1), // Random X magnitude between 0 and 1
-        ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)], // Random Y wave type
-        (Math.random() * 2).toFixed(1), // Random Y phase between 0 and 2
+        waveTypeY, // Use selected Y wave type
+        yPhase, // Use adjusted Y phase
         (Math.random() * 1).toFixed(1), // Random Y magnitude between 0 and 1
         Math.random() < 0.5, // Random boolean for show wave
         `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Random wave debug color
         ["BLEND", "ADD", "DARKEST", "LIGHTEST", "DIFFERENCE", "EXCLUSION", "MULTIPLY", "SCREEN"][Math.floor(Math.random() * 8)], // Random blend mode
-        ["Wix Madefor Text", "Roboto Flex", "Playwrite NZ"][Math.floor(Math.random() * 3)] // Random font selection
+        ["Wix Madefor Text", "Roboto Flex", "Playwrite NZ"][Math.floor(Math.random() * 3)], // Random font selection
+        textSplitMode, // Use the randomly selected text split mode
+        ["circle", "square", "triangle","line","cross","rhombus"][Math.floor(Math.random() * 6)] // Random debug wave type
     );
     presetsDictionary[randomPreset.name] = randomPreset;
     applyPreset(randomPreset.name);
