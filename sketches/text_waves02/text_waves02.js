@@ -72,7 +72,7 @@ function draw() {
     checkFPS();
     background(backgroundColor);
     textAlign(CENTER,CENTER);
-    translate(width/2-padding, 0);
+    translate(width/2, 0);
 
     // Apply the current blend mode
     blendMode(BLEND);
@@ -657,9 +657,9 @@ function updateSketchVariables() {
 
 // Add this function to handle canvas size changes
 function updateCanvasSize() {
-    const width = parseInt(document.getElementById('canvasWidth').value);
-    const height = parseInt(document.getElementById('canvasHeight').value);
-    canvasWidth = width;
-    canvasHeight = height;
-    resizeCanvas(width, height);
+    const newWidth = parseInt(document.getElementById('canvasWidth').value);
+    const newHeight = parseInt(document.getElementById('canvasHeight').value);
+    canvasWidth = newWidth;
+    canvasHeight = newHeight;
+    resizeCanvas(newWidth, newHeight);
 }
