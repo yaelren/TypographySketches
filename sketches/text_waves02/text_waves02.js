@@ -427,14 +427,6 @@ function setUpUI() {
 
     updateElementsArray();
 
-    // const spaceBetweenWordsElement = document.getElementById('spaceBetweenWords');
-    // spaceBetweenWords = parseInt(spaceBetweenWordsElement.value, 10);
-    // updateElementsArray();
-    // spaceBetweenWordsElement.addEventListener('input', function() {
-    //     spaceBetweenWords = parseInt(this.value, 10);
-    //     updateElementsArray();
-    // });
-
     const rotateWithPositionElement = document.getElementById('rotateWithPosition');
     rotateWithPosition = rotateWithPositionElement.checked;
     rotateWithPositionElement.addEventListener('change', function() {
@@ -518,13 +510,7 @@ function setUpUI() {
         document.getElementById('fontWeight').disabled = autoPulseWeight;
     });
 
-    // // Add event listener for font italic
-    // const fontItalicElement = document.getElementById('fontItalic');
-    // fontItalic = parseFloat(fontItalicElement.value);
-    // fontItalicElement.addEventListener('input', function() {
-    //     fontItalic = parseFloat(this.value);
-    //     document.getElementById('fontItalicValue').textContent = fontItalic;
-    // });
+
 
     const autoPulseFontSizeElement = document.getElementById('autoPulseFontSize');
     autoPulseFontSize = autoPulseFontSizeElement.checked;
@@ -583,7 +569,8 @@ function setUpUI() {
                 try {
                     // Clean up any existing media
                     if (loadedMedia) {
-                        if (loadedMedia instanceof p5.Video) {
+                        // Check if it's a video by checking for video-specific methods
+                        if (loadedMedia.elt && loadedMedia.elt.tagName === 'VIDEO') {
                             loadedMedia.remove();
                         }
                         loadedMedia = null;
@@ -612,7 +599,8 @@ function setUpUI() {
         } else {
             // If no file is selected, remove the media
             if (loadedMedia) {
-                if (loadedMedia instanceof p5.Video) {
+                // Check if it's a video by checking for video-specific methods
+                if (loadedMedia.elt && loadedMedia.elt.tagName === 'VIDEO') {
                     loadedMedia.remove();
                 }
                 loadedMedia = null;
