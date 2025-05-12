@@ -120,12 +120,17 @@
             </div>
 
             <div class="control-group checkbox-group">
-                <label for="rotateOnWave">Rotate On Wave</label>
-                <input type="checkbox" id="rotateOnWave">
+                <label for="rotateWithFlow">Rotate On Wave Path</label>
+                <input type="checkbox" id="rotateWithFlow">
             </div>
 
             <div class="control-group checkbox-group">
-                <label for="reverseAnimation">Reverse</label>
+                <label for="rotateWithPosition">Rotate With Position</label>
+                <input type="checkbox" id="rotateWithPosition">
+            </div>
+
+            <div class="control-group checkbox-group">
+                <label for="reverseAnimation">Reverse Animation</label>
                 <input type="checkbox" id="reverseAnimation">
             </div>
 
@@ -206,7 +211,7 @@
         </div>
     </div>
 
- 
+
 
     <div id="artboard">
         <div id="canvasWrapper"></div>
@@ -297,7 +302,7 @@
         const uiToggle = document.getElementById('uiToggle');
         const ui = document.getElementById('ui');
 
-        uiToggle.addEventListener('click', function() {
+        uiToggle.addEventListener('click', function () {
             ui.classList.toggle('hidden');
             uiToggle.classList.toggle('hidden');
             // Update the grid template columns when UI is hidden

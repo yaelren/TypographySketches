@@ -16,7 +16,8 @@ const presetsDictionary = {
             "#ff9500"
         ],
         "speed": "1.78",
-        "rotateOnWave": false,
+        "rotateWithPosition": false,
+        "rotateWithFlow": false,
         "reverseAnimation": false,
         "stepBetweenWords": "10",
         "waveTypeX": "sin",
@@ -46,7 +47,8 @@ const presetsDictionary = {
             "#4f09ec"
         ],
         "speed": "1.04",
-        "rotateOnWave": true,
+        "rotateWithPosition": true,
+        "rotateWithFlow": false,
         "reverseAnimation": false,
         "stepBetweenWords": "17",
         "waveTypeX": "sin",
@@ -76,7 +78,8 @@ const presetsDictionary = {
             "#56165a"
         ],
         "speed": "6.32",
-        "rotateOnWave": false,
+        "rotateWithPosition": false,
+        "rotateWithFlow": false,
         "reverseAnimation": false,
         "stepBetweenWords": "8",
         "waveTypeX": "static",
@@ -106,7 +109,8 @@ const presetsDictionary = {
             "#4f09ec"
         ],
         "speed": "0.95",
-        "rotateOnWave": false,
+        "rotateWithPosition": false,
+        "rotateWithFlow": false,
         "reverseAnimation": false,
         "stepBetweenWords": "9",
         "waveTypeX": "cos",
@@ -137,7 +141,8 @@ const presetsDictionary = {
             "#0400ff"
         ],
         "speed": "1.66",
-        "rotateOnWave": true,
+        "rotateWithPosition": true,
+        "rotateWithFlow": false,
         "reverseAnimation": false,
         "stepBetweenWords": "1",
         "waveTypeX": "tan",
@@ -167,7 +172,8 @@ const presetsDictionary = {
             "#74ee72"
         ],
         "speed": "4",
-        "rotateOnWave": true,
+        "rotateWithPosition": true,
+        "rotateWithFlow": false,
         "reverseAnimation": false,
         "stepBetweenWords": "8",
         "waveTypeX": "static",
@@ -198,7 +204,8 @@ const presetsDictionary = {
             "#70cc00"
         ],
         "speed": "0.67",
-        "rotateOnWave": false,
+        "rotateWithPosition": false,
+        "rotateWithFlow": false,
         "reverseAnimation": true,
         "stepBetweenWords": "37",
         "waveTypeX": "sin",
@@ -228,7 +235,8 @@ const presetsDictionary = {
             "#45e29a"
         ],
         "speed": "0.2",
-        "rotateOnWave": false,
+        "rotateWithPosition": false,
+        "rotateWithFlow": false,
         "reverseAnimation": false,
         "stepBetweenWords": "32",
         "waveTypeX": "tan",
@@ -300,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 class Preset {
-    constructor(name, textInput, fontSize, autoPulseFontSize, fontWeight, autoPulseWeight, numRepetitions, spaceBetweenWords, backgroundColor, textColors, speed, rotateOnWave, reverseAnimation, stepBetweenWords, waveTypeX, xPhase, xMagnitude, waveTypeY, yPhase, yMagnitude, showWave, waveDebugColor, currentBlendMode, currentFont) {
+    constructor(name, textInput, fontSize, autoPulseFontSize, fontWeight, autoPulseWeight, numRepetitions, spaceBetweenWords, backgroundColor, textColors, speed, rotateWithPosition, rotateWithFlow, reverseAnimation, stepBetweenWords, waveTypeX, xPhase, xMagnitude, waveTypeY, yPhase, yMagnitude, showWave, waveDebugColor, currentBlendMode, currentFont) {
         this.name = name;
         this.textInput = textInput;
         this.fontSize = fontSize;
@@ -312,7 +320,8 @@ class Preset {
         this.backgroundColor = backgroundColor;
         this.textColors = textColors;
         this.speed = speed;
-        this.rotateOnWave = rotateOnWave;
+        this.rotateWithPosition = rotateWithPosition;
+        this.rotateWithFlow = rotateWithFlow;
         this.reverseAnimation = reverseAnimation;
         this.stepBetweenWords = stepBetweenWords;
         this.waveTypeX = waveTypeX;
@@ -372,7 +381,8 @@ function savePreset(presetName) {
             document.getElementById('textColor3').value
         ],
         document.getElementById('speed').value,
-        document.getElementById('rotateOnWave').checked,
+        document.getElementById('rotateWithPosition').checked,
+        document.getElementById('rotateWithFlow').checked,
         document.getElementById('reverseAnimation').checked,
         document.getElementById('stepBetweenWords').value,
         document.getElementById('waveTypeX').value,
@@ -432,7 +442,8 @@ function applyPreset(presetName, preset = null) {
         document.getElementById('speed').value = preset.speed;
         document.getElementById('speedValue').textContent = preset.speed;
 
-        document.getElementById('rotateOnWave').checked = preset.rotateOnWave;
+        document.getElementById('rotateWithPosition').checked = preset.rotateWithPosition;
+        document.getElementById('rotateWithFlow').checked = preset.rotateWithFlow;
         document.getElementById('reverseAnimation').checked = preset.reverseAnimation;
 
         // Update step between words and its display
@@ -493,7 +504,8 @@ function shufflePreset() {
             `#${Math.floor(Math.random() * 16777215).toString(16)}`  // Random text color 3
         ],
         (Math.random() * 2).toFixed(2), // Random speed between 0 and 5
-        Math.random() < 0.5, // Random boolean for rotate on wave
+        Math.random() < 0.5, // Random boolean for rotate with position
+        Math.random() < 0.5, // Random boolean for rotate with flow
         Math.random() < 0.5, // Random boolean for reverse animation
         Math.floor(Math.random() * 101), // Random step between words between 0 and 100
         ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)], // Random X wave type

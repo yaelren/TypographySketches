@@ -9,7 +9,8 @@ let yMagnitude = 0.22;
 let waveTypeX = 'sin';
 let waveTypeY = 'tan';
 let reverseAnimation = false;
-let rotateOnWave = true;
+let rotateWithPosition = true;
+let rotateWithFlow = false;
 
 //Typography
 let textInput = "hello how are you";
@@ -131,6 +132,13 @@ function drawText() {
         // Calculate the angle of rotation based on the wave
         let angle = -atan2(waveY, waveX);
 
+        // Calculate the wave direction angle
+        let nextAngleX = radians(frameCount * speed * xPhase + (i + 1) * stepBetweenWords);
+        let nextAngleY = radians(frameCount * speed * yPhase + (i + 1) * stepBetweenWords);
+        let nextWaveX = calculateWaveValue(nextAngleX, height * xMagnitude, waveTypeX, i + 1, widthSize);
+        let nextWaveY = calculateWaveValue(nextAngleY, height * yMagnitude, waveTypeY, i + 1, widthSize);
+        let directionAngle = atan2(nextWaveY - waveY, nextWaveX - waveX);
+
         // Calculate font weight based on wave position if autoPulseWeight is enabled
         let currentFontWeight = fontWeight;
         if (autoPulseWeight) {
@@ -138,9 +146,11 @@ function drawText() {
             currentFontWeight = map(sin(t * 0.0025 - i), -1, 1, 400, 800);
         }
 
-        // Apply rotation if rotateOnWave is true
-        if (rotateOnWave) {
+        // Apply rotation based on the selected mode
+        if (rotateWithPosition) {
             rotate(angle);
+        } else if (rotateWithFlow) {
+            rotate(directionAngle);
         }
 
         // Set the font with the current weight and italic values
@@ -151,7 +161,7 @@ function drawText() {
         text(element, 0, 0);
 
         // Reset rotation
-        if (rotateOnWave) {
+        if (rotateWithPosition || rotateWithFlow) {
             rotate(-angle);
         }
 
@@ -341,12 +351,28 @@ function setUpUI() {
     //     updateElementsArray();
     // });
 
-    const rotateOnWaveElement = document.getElementById('rotateOnWave');
-    rotateOnWave = rotateOnWaveElement.checked;
-    rotateOnWaveElement.addEventListener('change', function() {
-        rotateOnWave = this.checked;
+    const rotateWithPositionElement = document.getElementById('rotateWithPosition');
+    rotateWithPosition = rotateWithPositionElement.checked;
+    rotateWithPositionElement.addEventListener('change', function() {
+        rotateWithPosition = this.checked;
+        // Disable rotateWithFlow when rotateWithPosition is enabled
+        if (this.checked) {
+            document.getElementById('rotateWithFlow').checked = false;
+            rotateWithFlow = false;
+        }
     });
     
+    const rotateWithFlowElement = document.getElementById('rotateWithFlow');
+    rotateWithFlow = rotateWithFlowElement.checked;
+    rotateWithFlowElement.addEventListener('change', function() {
+        rotateWithFlow = this.checked;
+        // Disable rotateWithPosition when rotateWithFlow is enabled
+        if (this.checked) {
+            document.getElementById('rotateWithPosition').checked = false;
+            rotateWithPosition = false;
+        }
+    });
+
     // Repetition controls
     document.getElementById('increaseRepetitions').addEventListener('click', function() {
         numRepetitions++;
@@ -479,7 +505,7 @@ function updateSketchVariables() {
         document.getElementById('textColor3').value
     ];
     speed = parseFloat(document.getElementById('speed').value);
-    rotateOnWave = document.getElementById('rotateOnWave').checked;
+    rotateWithPosition = document.getElementById('rotateWithPosition').checked;
     reverseAnimation = document.getElementById('reverseAnimation').checked;
     stepBetweenWords = parseInt(document.getElementById('stepBetweenWords').value, 10);
     waveTypeX = document.getElementById('waveTypeX').value;
