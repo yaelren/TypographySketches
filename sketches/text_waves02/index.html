@@ -14,146 +14,195 @@
 
 <body>
 
+    <button id="uiToggle" title="Toggle UI Panel">☰</button>
+
     <div id="ui">
+        <div class="global-controls">
+            <button id="shuffleButton" class="action-button">Shuffle</button>
+        </div>
 
         <!-- Text Controls -->
         <h3>Text <button onclick="toggleSection('textControls')">▼</button></h3>
         <div id="textControls">
-            <label for="textInput">Text Input:</label>
-            <br>
-            <textarea id="textInput" rows="4" cols="50">hello how are you</textarea><br>
+            <div class="control-group">
+                <label for="textInput">Text:</label>
+                <textarea id="textInput" rows="2">hello how are you</textarea>
+            </div>
 
-            <!-- Font Controls -->
-            <h4>Font Controls</h4>
-            <label for="fontSelection">Font:</label>
-            <select id="fontSelection">
-                <option value="Wix Madefor Text">Wix Madefor Text</option>
-                <option value="Roboto Flex">Roboto Flex</option>
-                <option value="Playwrite NZ">Playwrite NZ</option>
-            </select><br>
+            <div class="control-group">
+                <label for="fontSelection">Font:</label>
+                <select id="fontSelection">
+                    <option value="Wix Madefor Text">Wix Madefor Text</option>
+                    <option value="Roboto Flex">Roboto Flex</option>
+                    <option value="Playwrite NZ">Playwrite NZ</option>
+                </select>
+            </div>
 
-            <label for="fontSize">Font Size:</label>
-            <input type="range" id="fontSize" min="10" max="300" step="1" value="50">
-            <span id="fontSizeValue">50</span><br>
+            <div class="control-group slider-group">
+                <label for="fontSize">Size:</label>
+                <input type="range" id="fontSize" min="10" max="300" step="1" value="50">
+                <span id="fontSizeValue">50</span>
+            </div>
 
-            <label for="autoPulseFontSize">Auto Pulse Font Size:</label>
-            <input type="checkbox" id="autoPulseFontSize"><br>
+            <div class="control-group checkbox-group">
+                <label for="autoPulseFontSize">Auto Pulse Size</label>
+                <input type="checkbox" id="autoPulseFontSize">
+            </div>
 
-            <label for="fontWeight">Font Weight:</label>
-            <input type="range" id="fontWeight" min="100" max="800" step="1" value="400">
-            <span id="fontWeightValue">400</span><br>
+            <div class="control-group slider-group">
+                <label for="fontWeight">Weight:</label>
+                <input type="range" id="fontWeight" min="100" max="800" step="1" value="400">
+                <span id="fontWeightValue">400</span>
+            </div>
 
-            <label for="autoPulseWeight">Auto Pulse Weight:</label>
-            <input type="checkbox" id="autoPulseWeight"><br>
+            <div class="control-group checkbox-group">
+                <label for="autoPulseWeight">Auto Pulse Weight</label>
+                <input type="checkbox" id="autoPulseWeight">
+            </div>
 
-            <br><Br>
-            <div id="repetitionControls">
-                <label for="numRepetitions">Number of Repetitions:</label>
+            <div class="control-group button-group">
+                <label>Repetitions:</label>
                 <button id="decreaseRepetitions">-</button>
                 <span id="numRepetitions">1</span>
                 <button id="increaseRepetitions">+</button>
             </div>
-            <label for="spaceBetweenWords">Space Between Words:</label>
-            <button id="decreaseSpaceBetweenWords">-</button>
-            <span id="spaceBetweenWordsValue">0</span>
-            <button id="increaseSpaceBetweenWords">+</button><br>
 
-            <br>
-            <h4>Colors</h4>
-            <label for="blendModeDropdown">Blend Mode:</label>
-            <select id="blendModeDropdown">
-                <option value="BLEND">Blend</option>
-                <option value="ADD">Add</option>
-                <option value="DARKEST">Darkest</option>
-                <option value="LIGHTEST">Lightest</option>
-                <option value="DIFFERENCE">Difference</option>
-                <option value="EXCLUSION">Exclusion</option>
-                <option value="MULTIPLY">Multiply</option>
-                <option value="SCREEN">Screen</option>
-                <option value="REPLACE">Replace</option>
-            </select><br>
-            <label for="backgroundColor">Background Color:</label>
-            <input type="color" id="backgroundColor" value="#202004"><br>
+            <div class="control-group button-group">
+                <label>Word Spacing:</label>
+                <button id="decreaseSpaceBetweenWords">-</button>
+                <span id="spaceBetweenWordsValue">0</span>
+                <button id="increaseSpaceBetweenWords">+</button>
+            </div>
 
-            <label for="textColor1">Text Color 1:</label>
-            <input type="color" id="textColor1" value="#ed6c44"><br>
+            <div class="control-group">
+                <label for="blendModeDropdown">Blend Mode:</label>
+                <select id="blendModeDropdown">
+                    <option value="BLEND">Blend</option>
+                    <option value="ADD">Add</option>
+                    <option value="DARKEST">Darkest</option>
+                    <option value="LIGHTEST">Lightest</option>
+                    <option value="DIFFERENCE">Difference</option>
+                    <option value="EXCLUSION">Exclusion</option>
+                    <option value="MULTIPLY">Multiply</option>
+                    <option value="SCREEN">Screen</option>
+                    <option value="REPLACE">Replace</option>
+                </select>
+            </div>
 
-            <label for="textColor2">Text Color 2:</label>
-            <input type="color" id="textColor2" value="#e667fc"><br>
+            <div class="control-group color-group">
+                <label for="backgroundColor">Background:</label>
+                <input type="color" id="backgroundColor" value="#202004">
+            </div>
 
-            <label for="textColor3">Text Color 3:</label>
-            <input type="color" id="textColor3" value="#3638b1"><br>
+            <div class="control-group color-group">
+                <label for="textColor1">Color 1:</label>
+                <input type="color" id="textColor1" value="#ed6c44">
+            </div>
+
+            <div class="control-group color-group">
+                <label for="textColor2">Color 2:</label>
+                <input type="color" id="textColor2" value="#e667fc">
+            </div>
+
+            <div class="control-group color-group">
+                <label for="textColor3">Color 3:</label>
+                <input type="color" id="textColor3" value="#3638b1">
+            </div>
         </div>
 
         <!-- Animation Controls -->
         <h3>Animation <button onclick="toggleSection('animationControls')">▼</button></h3>
         <div id="animationControls">
-            <label for="speed">Speed:</label>
-            <input type="range" id="speed" min="0" max="10" step="0.01" value="1">
-            <span id="speedValue">1</span><br>
+            <div class="control-group slider-group">
+                <label for="speed">Speed:</label>
+                <input type="range" id="speed" min="0" max="10" step="0.01" value="1">
+                <span id="speedValue">1</span>
+            </div>
 
-            <label for="rotateOnWave">Rotate On Wave:</label>
-            <input type="checkbox" id="rotateOnWave"><br>
+            <div class="control-group checkbox-group">
+                <label for="rotateOnWave">Rotate On Wave</label>
+                <input type="checkbox" id="rotateOnWave">
+            </div>
 
-            <label for="reverseAnimation">Reverse Animation:</label>
-            <input type="checkbox" id="reverseAnimation"><br>
-            <label for="stepBetweenWords">Waves Frequency:</label>
-            <input type="range" id="stepBetweenWords" min="0" max="100" step="1" value="30">
-            <span id="stepBetweenWordsValue">30</span><br>
-            <h4>--X Axis--</h4>
+            <div class="control-group checkbox-group">
+                <label for="reverseAnimation">Reverse</label>
+                <input type="checkbox" id="reverseAnimation">
+            </div>
 
-            <label for="waveTypeX">Wave Type:</label>
-            <select id="waveTypeX">
-                <option value="sin">Sin</option>
-                <option value="cos">Cos</option>
-                <option value="tan">Tan</option>
-                <option value="static">Static</option>
-            </select><br>
-            <label for="xPhase">Wave Phase:</label><br>
-            <input type="range" id="xPhase" min="0" max="2" step="0.1" value="0.5">
-            <span id="xPhaseValue">0.5</span><br>
-            <label for="xMagnitude">Wave Magnitude:</label><br>
-            <input type="range" id="xMagnitude" min="0" max="1" step="0.1" value="0.4">
-            <span id="xMagnitudeValue">0.4</span><br>
+            <div class="control-group slider-group">
+                <label for="stepBetweenWords">Frequency:</label>
+                <input type="range" id="stepBetweenWords" min="0" max="100" step="1" value="30">
+                <span id="stepBetweenWordsValue">30</span>
+            </div>
 
-            <h4>--Y Axis--</h4>
-            <label for="waveTypeY">Wave Type:</label>
-            <select id="waveTypeY">
-                <option value="sin">Sin</option>
-                <option value="cos">Cos</option>
-                <option value="tan">Tan</option>
-                <option value="static">Static</option>
-            </select><br>
-            <label for="yPhase">Wave Phase:</label><br>
-            <input type="range" id="yPhase" min="0" max="2" step="0.1" value="0.5">
-            <span id="yPhaseValue">0.5</span><br>
+            <h4>X Axis</h4>
+            <div class="control-group">
+                <label for="waveTypeX">Type:</label>
+                <select id="waveTypeX">
+                    <option value="sin">Sin</option>
+                    <option value="cos">Cos</option>
+                    <option value="tan">Tan</option>
+                    <option value="static">Static</option>
+                </select>
+            </div>
 
-            <label for="yMagnitude">Wave Magnitude:</label><br>
-            <input type="range" id="yMagnitude" min="0" max="1" step="0.1" value="0.22">
-            <span id="yMagnitudeValue">0.22</span><br>
+            <div class="control-group slider-group">
+                <label for="xPhase">Phase:</label>
+                <input type="range" id="xPhase" min="0" max="2" step="0.1" value="0.5">
+                <span id="xPhaseValue">0.5</span>
+            </div>
+
+            <div class="control-group slider-group">
+                <label for="xMagnitude">Width:</label>
+                <input type="range" id="xMagnitude" min="0" max="1" step="0.1" value="0.4">
+                <span id="xMagnitudeValue">0.4</span>
+            </div>
+
+            <h4>Y Axis</h4>
+            <div class="control-group">
+                <label for="waveTypeY">Type:</label>
+                <select id="waveTypeY">
+                    <option value="sin">Sin</option>
+                    <option value="cos">Cos</option>
+                    <option value="tan">Tan</option>
+                    <option value="static">Static</option>
+                </select>
+            </div>
+
+            <div class="control-group slider-group">
+                <label for="yPhase">Phase:</label>
+                <input type="range" id="yPhase" min="0" max="2" step="0.1" value="0.5">
+                <span id="yPhaseValue">0.5</span>
+            </div>
+
+            <div class="control-group slider-group">
+                <label for="yMagnitude">Height:</label>
+                <input type="range" id="yMagnitude" min="0" max="1" step="0.1" value="0.22">
+                <span id="yMagnitudeValue">0.22</span>
+            </div>
         </div>
 
-        <!-- Debug Controls -->
-        <h3>Debug <button onclick="toggleSection('debugControls')">▼</button></h3>
+        <!-- Wave Controls -->
+        <h3>Wave <button onclick="toggleSection('debugControls')">▼</button></h3>
         <div id="debugControls">
-            <label for="showWave">Show Wave:</label>
-            <input type="checkbox" id="showWave" checked><br>
-            <label for="waveDebugColor">Wave Debug Color:</label>
-            <input type="color" id="waveDebugColor" value="#006400"><br>
-
-        
+            <div class="control-group checkbox-group">
+                <label for="showWave">Show Wave</label>
+                <input type="checkbox" id="showWave" checked>
+            </div>
+            <div class="control-group color-group">
+                <label for="waveDebugColor">Wave Color</label>
+                <input type="color" id="waveDebugColor" value="#006400">
+            </div>
         </div>
         <br><br><br>
         <h3>Presets <button onclick="toggleSection('presetControls')">▼</button></h3>
         <div id="presetControls">
-            <button id="shuffleButton">Shuffle</button><br><br>
             <div id="presetContainer"></div>
-            <br><br><br>
-
-            <button id="savePresetButton">Save Preset</button>
-            <button id="loadPresetButton">Load Preset</button>
-      
-            <input type="file" id="presetFileInput" style="display: none;" accept=".json">
+            <div class="preset-actions">
+                <button id="savePresetButton">Save Preset</button>
+                <button id="loadPresetButton">Load Preset</button>
+                <input type="file" id="presetFileInput" style="display: none;" accept=".json">
+            </div>
         </div>
     </div>
 
@@ -243,6 +292,17 @@
         document.getElementById('textControls').style.display = 'block';
         document.getElementById('animationControls').style.display = 'block';
         document.getElementById('debugControls').style.display = 'block';
+
+        // Add UI toggle functionality
+        const uiToggle = document.getElementById('uiToggle');
+        const ui = document.getElementById('ui');
+
+        uiToggle.addEventListener('click', function() {
+            ui.classList.toggle('hidden');
+            uiToggle.classList.toggle('hidden');
+            // Update the grid template columns when UI is hidden
+            document.body.style.gridTemplateColumns = ui.classList.contains('hidden') ? '0 1fr' : '300px 1fr';
+        });
     </script>
 
 </body>
