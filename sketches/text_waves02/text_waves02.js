@@ -46,10 +46,13 @@ let debugWaveType = 'circle';
 let canvasWidth = 3000;
 let canvasHeight = 3000;
 
+// Add these variables at the top with other UI variables
+let loadedMedia = null;
+let mediaKey = "1234567890MEDIA0987654321";
+
 //=========================================
 
 let padding = 280;
-
 async function setup() {
     canvasWidth = windowWidth;
     canvasHeight = windowHeight;
@@ -122,9 +125,6 @@ function drawText() {
     let elementWidth = fontSize;
     let numOfElements = elements.length * numRepetitions;
     let widthSize = width / numOfElements;
-    // if(textSplitMode === 'sentence'){
-    //     widthSize = width;
-    // }
     let colorIndex = 0;
     const autoPulseWeight = document.getElementById('autoPulseWeight').checked;
 
@@ -145,7 +145,24 @@ function drawText() {
             textAlign(CENTER,CENTER);
         }
 
-        // Set the fill color based on the index
+        // Handle media element
+        if (element === mediaKey && loadedMedia) {
+            // Calculate size based on font size
+            let mediaSize = currentFontSize * 1.5;
+            
+            // Apply the current blend mode
+            blendMode(currentBlendMode);
+            
+            // Draw the media (works for both images and videos)
+            imageMode(CENTER);
+            image(loadedMedia, 0, 0, mediaSize, mediaSize);
+            
+            // Reset blend mode
+            blendMode(BLEND);
+            return;
+        }
+
+        // Handle text element
         fill(textColors[colorIndex % textColors.length]);
         if (element.trim() !== "") {
             colorIndex++;
@@ -555,6 +572,54 @@ function setUpUI() {
     });
 
     document.getElementById('canvasControls').style.display = 'block';
+
+    // Add file input handling
+    const imageInput = document.getElementById('imageInput');
+    imageInput.addEventListener('change', async function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                try {
+                    // Clean up any existing media
+                    if (loadedMedia) {
+                        if (loadedMedia instanceof p5.Video) {
+                            loadedMedia.remove();
+                        }
+                        loadedMedia = null;
+                    }
+
+                    // Check if the file is a video
+                    if (file.type.startsWith('video/')) {
+                        loadedMedia = createVideo(event.target.result, () => {
+                            loadedMedia.hide(); // Hide the video element
+                            loadedMedia.loop(); // Make it loop
+                            loadedMedia.volume(0); // Mute it
+                            console.log("Video loaded successfully");
+                            updateElementsArray();
+                        });
+                    } else {
+                        // It's an image or GIF
+                        loadedMedia = await loadImage(event.target.result);
+                        console.log("Image/GIF loaded successfully");
+                        updateElementsArray();
+                    }
+                } catch (error) {
+                    console.error("Error loading media:", error);
+                }
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // If no file is selected, remove the media
+            if (loadedMedia) {
+                if (loadedMedia instanceof p5.Video) {
+                    loadedMedia.remove();
+                }
+                loadedMedia = null;
+            }
+            updateElementsArray();
+        }
+    });
 }
 
 function updateElementsArray() {
@@ -589,6 +654,12 @@ function updateElementsArray() {
                 }
             });
             break;
+    }
+    
+
+    // Add the media as the last element if it exists
+    if (loadedMedia) {
+        elements.push(mediaKey);
     }
 }
 
