@@ -42,12 +42,16 @@ let textSplitMode = 'word';
 // Add this with other UI variables at the top
 let debugWaveType = 'circle';
 
+// Add these variables at the top with other UI variables
+let canvasWidth = 800;
+let canvasHeight = 600;
+
 //=========================================
 
 let padding = 280;
 
 async function setup() {
-    var c = createCanvas(windowWidth, windowHeight);
+    var c = createCanvas(canvasWidth, canvasHeight);
     c.parent("canvasWrapper");
     setUpUI();
 
@@ -55,15 +59,17 @@ async function setup() {
     await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap');
     await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Roboto+Flex:ital,wght@0,400..800;1,400..800&display=swap');
     await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Playwrite+NZ:wght@100..400&display=swap');
-
-    
 }
 
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+    // Only resize if we're using window dimensions
+    if (document.getElementById('canvasPreset').value === 'custom') {
+        resizeCanvas(canvasWidth, canvasHeight);
+    }
 }
 
 function draw() {
+    checkFPS();
     background(backgroundColor);
     textAlign(CENTER,CENTER);
     translate(width/2-padding, 0);
@@ -76,6 +82,14 @@ function draw() {
     }
     drawText();
     // drawVariableText();
+}
+function checkFPS(){
+    const fps = frameRate();
+    if(fps < 15){
+        //MAKE BLEND MODE MORE BLEND
+
+        // MAKE NUM OF REPETITIONS LESS
+    }
 }
 
 function drawVariableText() {
@@ -222,7 +236,7 @@ function drawWave() {
                 quad(
                     0, -elementWidth/4,           // top
                     elementWidth/2, 0,           // right
-                    0, elementWidth/4,           // bottom
+                    elementWidth/4, elementWidth/2,           // bottom
                     -elementWidth/2, 0           // left
                 );
                 break;
@@ -514,6 +528,31 @@ function setUpUI() {
     debugWaveTypeElement.addEventListener('change', function() {
         debugWaveType = this.value;
     });
+
+    // Add event listeners for canvas controls
+    document.getElementById('canvasWidth').addEventListener('input', function() {
+        updateValueDisplay('canvasWidth', this.value);
+        updateCanvasSize();
+    });
+
+    document.getElementById('canvasHeight').addEventListener('input', function() {
+        updateValueDisplay('canvasHeight', this.value);
+        updateCanvasSize();
+    });
+
+    document.getElementById('canvasPreset').addEventListener('change', function() {
+        const preset = this.value;
+        if (preset !== 'custom') {
+            const [width, height] = preset.split('x').map(Number);
+            document.getElementById('canvasWidth').value = width;
+            document.getElementById('canvasHeight').value = height;
+            updateValueDisplay('canvasWidth', width);
+            updateValueDisplay('canvasHeight', height);
+            updateCanvasSize();
+        }
+    });
+
+    document.getElementById('canvasControls').style.display = 'block';
 }
 
 function updateElementsArray() {
@@ -614,4 +653,13 @@ function updateSketchVariables() {
 
     // Update elements array
     updateElementsArray();
+}
+
+// Add this function to handle canvas size changes
+function updateCanvasSize() {
+    const width = parseInt(document.getElementById('canvasWidth').value);
+    const height = parseInt(document.getElementById('canvasHeight').value);
+    canvasWidth = width;
+    canvasHeight = height;
+    resizeCanvas(width, height);
 }

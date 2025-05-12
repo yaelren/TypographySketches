@@ -535,11 +535,7 @@ function applyPreset(presetName, preset = null) {
 
 function shufflePreset() {
     console.log("Shuffling preset");
-    const textSplitMode = ["sentence", "word", "char"][Math.floor(Math.random() * 3)];
-    const spaceBetweenWords = textSplitMode === 'char' 
-        ? Math.floor(Math.random() * 3) // 0 to 2 for char mode
-        : Math.floor(Math.random() * 10); // 0 to 9 for other modes
-
+    
     // Select wave types first
     const waveTypeX = ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)];
     const waveTypeY = ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)];
@@ -547,6 +543,15 @@ function shufflePreset() {
     // Check if either wave type is tan or static
     const hasTanWave = waveTypeX === 'tan' || waveTypeY === 'tan';
     const hasStaticWave = waveTypeX === 'static' || waveTypeY === 'static';
+    
+    // Select text split mode based on wave types
+    const textSplitMode = hasStaticWave
+        ? ["word", "char"][Math.floor(Math.random() * 2)]  // Only word or char if static wave
+        : ["sentence", "word", "char"][Math.floor(Math.random() * 3)];  // All options if no static wave
+    
+    const spaceBetweenWords = textSplitMode === 'char' 
+        ? Math.floor(Math.random() * 3) // 0 to 2 for char mode
+        : Math.floor(Math.random() * 10); // 0 to 9 for other modes
     
     // Adjust repetitions based on wave types
     let numRepetitions;
@@ -571,6 +576,11 @@ function shufflePreset() {
         ? (Math.random() * 20).toFixed(1)  // 0 to 20 for char mode
         : (Math.random() * 2).toFixed(1);  // 0 to 2 for other modes
 
+    // Randomly choose one rotation type or none
+    const rotationChoice = Math.floor(Math.random() * 3); // 0, 1, or 2
+    const rotateWithPosition = rotationChoice === 1;
+    const rotateWithFlow = rotationChoice === 2;
+
     const randomPreset = new Preset(
         "Random", // Preset name
         document.getElementById('textInput').value, // Keep current text input
@@ -587,8 +597,8 @@ function shufflePreset() {
             `#${Math.floor(Math.random() * 16777215).toString(16)}`  // Random text color 3
         ],
         speed, // Use adjusted speed
-        Math.random() < 0.5, // Random boolean for rotate with position
-        Math.random() < 0.5, // Random boolean for rotate with flow
+        rotateWithPosition, // Either true or false based on rotation choice
+        rotateWithFlow, // Either true or false based on rotation choice
         Math.random() < 0.5, // Random boolean for reverse animation
         Math.floor(Math.random() * 101), // Random step between words between 0 and 100
         waveTypeX, // Use selected X wave type
@@ -601,7 +611,7 @@ function shufflePreset() {
         `#${Math.floor(Math.random() * 16777215).toString(16)}`, // Random wave debug color
         ["BLEND", "ADD", "DARKEST", "LIGHTEST", "DIFFERENCE", "EXCLUSION", "MULTIPLY", "SCREEN"][Math.floor(Math.random() * 8)], // Random blend mode
         ["Wix Madefor Text", "Roboto Flex", "Playwrite NZ"][Math.floor(Math.random() * 3)], // Random font selection
-        textSplitMode, // Use the randomly selected text split mode
+        textSplitMode, // Use the selected text split mode
         ["circle", "square", "triangle","line","cross","rhombus"][Math.floor(Math.random() * 6)] // Random debug wave type
     );
     presetsDictionary[randomPreset.name] = randomPreset;
