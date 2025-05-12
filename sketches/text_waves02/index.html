@@ -239,14 +239,14 @@
 
             <div class="control-group slider-group">
                 <label for="canvasWidth">Width:</label>
-                <input type="range" id="canvasWidth" min="100" max="3000" step="1" value="800">
-                <span id="canvasWidthValue">800</span>
+                <input type="range" id="canvasWidth" min="100" max="3000" step="1" value="3000">
+                <span id="canvasWidthValue">3000</span>
             </div>
 
             <div class="control-group slider-group">
                 <label for="canvasHeight">Height:</label>
-                <input type="range" id="canvasHeight" min="100" max="3000" step="1" value="600">
-                <span id="canvasHeightValue">600</span>
+                <input type="range" id="canvasHeight" min="100" max="3000" step="1" value="3000">
+                <span id="canvasHeightValue">3000</span>
             </div>
         </div>
 
@@ -262,12 +262,8 @@
         </div>
     </div>
 
-
-
-
-        <div id="canvasWrapper"></div>
+    <div id="canvasWrapper"></div>
   
-
     <script>
         // Function to update the value display
         function updateValueDisplay(id, value) {
@@ -306,10 +302,6 @@
         document.getElementById('fontSize').addEventListener('input', function () {
             updateValueDisplay('fontSize', this.value);
         });
-
-        // document.getElementById('spaceBetweenWords').addEventListener('input', function () {
-        //     updateValueDisplay('spaceBetweenWords', this.value);
-        // });
 
         document.getElementById('stepBetweenWords').addEventListener('input', function () {
             updateValueDisplay('stepBetweenWords', this.value);
@@ -359,6 +351,35 @@
             uiToggle.classList.toggle('hidden');
             // Update the grid template columns when UI is hidden
             document.body.style.gridTemplateColumns = ui.classList.contains('hidden') ? '0 1fr' : '300px 1fr';
+        });
+
+        // Add window resize handler for canvas size limits
+        window.addEventListener('resize', function() {
+            // Update slider max values based on window size
+            const canvasWidthSlider = document.getElementById('canvasWidth');
+            const canvasHeightSlider = document.getElementById('canvasHeight');
+            
+            // Set max values to window dimensions
+            canvasWidthSlider.max = window.innerWidth;
+            canvasHeightSlider.max = window.innerHeight;
+            
+            // If current values exceed new max, adjust them
+            if (parseInt(canvasWidthSlider.value) > window.innerWidth) {
+                canvasWidthSlider.value = window.innerWidth;
+                updateValueDisplay('canvasWidth', window.innerWidth);
+            }
+            if (parseInt(canvasHeightSlider.value) > window.innerHeight) {
+                canvasHeightSlider.value = window.innerHeight;
+                updateValueDisplay('canvasHeight', window.innerHeight);
+            }
+        });
+
+        // Initialize canvas size slider limits on page load
+        window.addEventListener('load', function() {
+            const canvasWidthSlider = document.getElementById('canvasWidth');
+            const canvasHeightSlider = document.getElementById('canvasHeight');
+            canvasWidthSlider.max = window.innerWidth;
+            canvasHeightSlider.max = window.innerHeight;
         });
     </script>
 

@@ -18,7 +18,7 @@ const presetsDictionary = {
         "speed": "1.78",
         "rotateWithPosition": false,
         "rotateWithFlow": false,
-        "reverseAnimation": false,
+        "reverseAnimation": true,
         "stepBetweenWords": "10",
         "waveTypeX": "sin",
         "xPhase": "0.3",

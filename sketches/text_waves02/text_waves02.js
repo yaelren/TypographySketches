@@ -43,14 +43,16 @@ let textSplitMode = 'word';
 let debugWaveType = 'circle';
 
 // Add these variables at the top with other UI variables
-let canvasWidth = 800;
-let canvasHeight = 600;
+let canvasWidth = 3000;
+let canvasHeight = 3000;
 
 //=========================================
 
 let padding = 280;
 
 async function setup() {
+    canvasWidth = windowWidth;
+    canvasHeight = windowHeight;
     var c = createCanvas(canvasWidth, canvasHeight);
     c.parent("canvasWrapper");
     setUpUI();
