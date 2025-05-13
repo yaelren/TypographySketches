@@ -75,9 +75,9 @@ const presetsDictionary = {
         "spaceBetweenWords": "0",
         "backgroundColor": "#d8fdde",
         "textColors": [
-          "#c875ff",
-          "#00c732",
-          "#56165a"
+            "#c875ff",
+            "#00c732",
+            "#56165a"
         ],
         "speed": "6.32",
         "rotateWithPosition": false,
@@ -258,7 +258,7 @@ const presetsDictionary = {
         "currentFont": "Wix Madefor Text",
         "textSplitMode": "word"
     },
-    "Sliding Squares":{
+    "Sliding Squares": {
         "name": "Sliding Squares",
         "textInput": "STUDIO\nVIDEO",
         "fontSize": "300",
@@ -269,9 +269,9 @@ const presetsDictionary = {
         "spaceBetweenWords": "5",
         "backgroundColor": "#39c952",
         "textColors": [
-          "#b5b5b5",
-          "#dba800",
-          "#acdaa4"
+            "#b5b5b5",
+            "#dba800",
+            "#acdaa4"
         ],
         "speed": "0.08",
         "rotateWithPosition": false,
@@ -290,7 +290,75 @@ const presetsDictionary = {
         "currentFont": "Roboto Flex",
         "textSplitMode": "word",
         "debugWaveType": "square"
-      }
+    },
+    "Dancing Bebe": {
+        "name": "Dancing Bebe",
+        "textInput": "dancing bebe",
+        "fontSize": "231",
+        "autoPulseFontSize": false,
+        "fontWeight": "623",
+        "autoPulseWeight": true,
+        "numRepetitions": "5",
+        "spaceBetweenWords": "6",
+        "backgroundColor": "#29cf24",
+        "textColors": [
+            "#30c87d",
+            "#9db7de",
+            "#a3542f"
+        ],
+        "speed": "0.61",
+        "rotateWithPosition": false,
+        "rotateWithFlow": false,
+        "reverseAnimation": false,
+        "stepBetweenWords": "30",
+        "waveTypeX": "sin",
+        "xPhase": "1.3",
+        "xMagnitude": "-0.2",
+        "waveTypeY": "cos",
+        "yPhase": "0.1",
+        "yMagnitude": "0.4",
+        "showWave": false,
+        "waveDebugColor": "#ddb296",
+        "currentBlendMode": "DIFFERENCE",
+        "currentFont": "Roboto Flex",
+        "textSplitMode": "word",
+        "debugWaveType": "cross",
+        "defaultGif": "gifs/big_baby.gif"
+    },
+    "Blobs": {
+        "name": "Blob",
+        "textInput": "++ STUDIO VIDEO ++",
+        "fontSize": "154",
+        "autoPulseFontSize": false,
+        "fontWeight": "674",
+        "autoPulseWeight": true,
+        "numRepetitions": "19",
+        "spaceBetweenWords": "0",
+        "backgroundColor": "#000000",
+        "textColors": [
+            "#2a292b",
+            "#93d77a",
+            "#a94807"
+        ],
+        "speed": "0.7",
+        "rotateWithPosition": false,
+        "rotateWithFlow": false,
+        "reverseAnimation": false,
+        "stepBetweenWords": "9",
+        "waveTypeX": "sin",
+        "xPhase": "0.8",
+        "xMagnitude": "-0.3",
+        "waveTypeY": "cos",
+        "yPhase": "0",
+        "yMagnitude": "0.5",
+        "showWave": false,
+        "waveDebugColor": "#ffffff",
+        "currentBlendMode": "LIGHTEST",
+        "currentFont": "Roboto Flex",
+        "textSplitMode": "sentence",
+        "debugWaveType": "square",
+        "defaultGif": "gifs/blob.gif"
+    }
 
 
 };
@@ -545,24 +613,27 @@ function applyPreset(presetName, preset = null) {
 
 function shufflePreset() {
     console.log("Shuffling preset");
-    
+
+    // Get the current GIF selection before shuffling
+    const currentGif = document.getElementById('defaultGifSelect').value;
+
     // Select wave types first
     const waveTypeX = ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)];
     const waveTypeY = ["sin", "cos", "tan", "static"][Math.floor(Math.random() * 4)];
-    
+
     // Check if either wave type is tan or static
     const hasTanWave = waveTypeX === 'tan' || waveTypeY === 'tan';
     const hasStaticWave = waveTypeX === 'static' || waveTypeY === 'static';
-    
+
     // Select text split mode based on wave types
     const textSplitMode = hasStaticWave
         ? ["word", "char"][Math.floor(Math.random() * 2)]  // Only word or char if static wave
         : ["sentence", "word", "char"][Math.floor(Math.random() * 3)];  // All options if no static wave
-    
-    const spaceBetweenWords = textSplitMode === 'char' 
+
+    const spaceBetweenWords = textSplitMode === 'char'
         ? Math.floor(Math.random() * 3) // 0 to 2 for char mode
         : Math.floor(Math.random() * 10); // 0 to 9 for other modes
-    
+
     // Adjust repetitions based on wave types
     let numRepetitions;
     if (hasTanWave) {
@@ -572,7 +643,7 @@ function shufflePreset() {
     } else {
         numRepetitions = Math.floor(Math.random() * 10) + 1; // 1 to 10 repetitions for others
     }
-    
+
     const speed = hasTanWave
         ? (Math.random() * 0.9).toFixed(2)  // 0 to 0.9 for tan
         : (Math.random() * 2).toFixed(2);   // 0 to 2 for others
@@ -581,7 +652,7 @@ function shufflePreset() {
     const xPhase = textSplitMode === 'char'
         ? (Math.random() * 20).toFixed(1)  // 0 to 20 for char mode
         : (Math.random() * 2).toFixed(1);  // 0 to 2 for other modes
-    
+
     const yPhase = textSplitMode === 'char'
         ? (Math.random() * 20).toFixed(1)  // 0 to 20 for char mode
         : (Math.random() * 2).toFixed(1);  // 0 to 2 for other modes
@@ -622,8 +693,8 @@ function shufflePreset() {
         ["BLEND", "ADD", "DARKEST", "LIGHTEST", "DIFFERENCE", "EXCLUSION", "MULTIPLY", "SCREEN"][Math.floor(Math.random() * 8)], // Random blend mode
         ["Wix Madefor Text", "Roboto Flex", "Playwrite NZ"][Math.floor(Math.random() * 3)], // Random font selection
         textSplitMode, // Use the selected text split mode
-        ["circle", "square", "triangle","line","cross","rhombus"][Math.floor(Math.random() * 6)], // Random debug wave type
-        document.getElementById('defaultGifSelect').value
+        ["circle", "square", "triangle", "line", "cross", "rhombus"][Math.floor(Math.random() * 6)], // Random debug wave type
+        currentGif
     );
     presetsDictionary[randomPreset.name] = randomPreset;
     applyPreset(randomPreset.name);

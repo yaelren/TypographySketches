@@ -603,36 +603,8 @@ function setUpUI() {
 
     document.getElementById('defaultGifSelect').addEventListener('change', async function() {
         const selectedGif = this.value;
-        if (selectedGif) {
-            // Clear the file input
-            document.getElementById('imageInput').value = '';
-            
-            try {
-                // Clean up any existing media
-                if (loadedMedia) {
-                    if (loadedMedia.elt && loadedMedia.elt.tagName === 'VIDEO') {
-                        loadedMedia.remove();
-                    }
-                    loadedMedia = null;
-                }
-
-                // Load the selected GIF
-                loadedMedia = await loadImage(selectedGif);
-                console.log("Default GIF loaded successfully");
-                updateElementsArray();
-            } catch (error) {
-                console.error("Error loading default GIF:", error);
-            }
-        } else {
-            // If no GIF is selected, remove the media
-            if (loadedMedia) {
-                if (loadedMedia.elt && loadedMedia.elt.tagName === 'VIDEO') {
-                    loadedMedia.remove();
-                }
-                loadedMedia = null;
-            }
-            updateElementsArray();
-        }
+        // Use the handleMedia helper function
+        handleMedia(selectedGif);
     });
 }
 
@@ -701,6 +673,33 @@ function getBlendMode(mode) {
     }
 }
 
+// Helper function to handle all media operations
+async function handleMedia(mediaPath = null) {
+    // Clean up any existing media
+    if (loadedMedia) {
+        if (loadedMedia.elt && loadedMedia.elt.tagName === 'VIDEO') {
+            loadedMedia.remove();
+        }
+        loadedMedia = null;
+    }
+
+    // Clear the file input
+    document.getElementById('imageInput').value = '';
+
+    // If a media path is provided, load it
+    if (mediaPath) {
+        try {
+            loadedMedia = await loadImage(mediaPath);
+            console.log("Media loaded successfully");
+        } catch (error) {
+            console.error("Error loading media:", error);
+        }
+    }
+
+    // Update elements array after any media changes
+    updateElementsArray();
+}
+
 function updateSketchVariables() {
     // Update global variables from UI elements
     textInput = document.getElementById('textInput').value;
@@ -737,6 +736,10 @@ function updateSketchVariables() {
     
     // Add text split mode update
     textSplitMode = document.getElementById('textSplitMode').value;
+
+    // Handle media using the helper function
+    const defaultGifSelect = document.getElementById('defaultGifSelect');
+    handleMedia(defaultGifSelect.value);
 
     // Update elements array
     updateElementsArray();
