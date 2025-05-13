@@ -52,7 +52,7 @@ let mediaKey = "1234567890MEDIA0987654321";
 
 //=========================================
 
-let padding = 280;
+
 async function setup() {
     canvasWidth = windowWidth;
     canvasHeight = windowHeight;
@@ -127,6 +127,9 @@ function drawText() {
     let widthSize = width / numOfElements;
     let colorIndex = 0;
     const autoPulseWeight = document.getElementById('autoPulseWeight').checked;
+    if(textSplitMode === 'sentence'){
+        elementWidth = fontSize*(1+spaceBetweenElements);
+    }
 
     drawWaveElements(numOfElements, elementWidth, stepBetweenWords, (i) => {
         // Calculate font size based on wave position if autoPulseFontSize is enabled
@@ -271,7 +274,7 @@ function drawWaveElements(numOfElements, elementWidth, step, drawElement) {
     let xTranslate = elementWidth / 2;
     let yTranslate = height / 2;
     
-    let shouldPadding= numRepetitions==1 ? 1 : 1;
+    let padding = 0.1 *width;
     if(waveTypeX === 'static'){
         xTranslate = -width/2+(padding);
     }
