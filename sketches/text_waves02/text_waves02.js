@@ -127,9 +127,7 @@ function drawText() {
     let widthSize = width / numOfElements;
     let colorIndex = 0;
     const autoPulseWeight = document.getElementById('autoPulseWeight').checked;
-    if(textSplitMode === 'sentence'){
-        elementWidth = fontSize*(1+spaceBetweenElements);
-    }
+
 
     drawWaveElements(numOfElements, elementWidth, stepBetweenWords, (i) => {
         // Calculate font size based on wave position if autoPulseFontSize is enabled
@@ -603,6 +601,40 @@ function setUpUI() {
             // If no file is selected, remove the media
             if (loadedMedia) {
                 // Check if it's a video by checking for video-specific methods
+                if (loadedMedia.elt && loadedMedia.elt.tagName === 'VIDEO') {
+                    loadedMedia.remove();
+                }
+                loadedMedia = null;
+            }
+            updateElementsArray();
+        }
+    });
+
+    document.getElementById('defaultGifSelect').addEventListener('change', async function() {
+        const selectedGif = this.value;
+        if (selectedGif) {
+            // Clear the file input
+            document.getElementById('imageInput').value = '';
+            
+            try {
+                // Clean up any existing media
+                if (loadedMedia) {
+                    if (loadedMedia.elt && loadedMedia.elt.tagName === 'VIDEO') {
+                        loadedMedia.remove();
+                    }
+                    loadedMedia = null;
+                }
+
+                // Load the selected GIF
+                loadedMedia = await loadImage(selectedGif);
+                console.log("Default GIF loaded successfully");
+                updateElementsArray();
+            } catch (error) {
+                console.error("Error loading default GIF:", error);
+            }
+        } else {
+            // If no GIF is selected, remove the media
+            if (loadedMedia) {
                 if (loadedMedia.elt && loadedMedia.elt.tagName === 'VIDEO') {
                     loadedMedia.remove();
                 }

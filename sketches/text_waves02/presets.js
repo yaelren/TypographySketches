@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 class Preset {
-    constructor(name, textInput, fontSize, autoPulseFontSize, fontWeight, autoPulseWeight, numRepetitions, spaceBetweenWords, backgroundColor, textColors, speed, rotateWithPosition, rotateWithFlow, reverseAnimation, stepBetweenWords, waveTypeX, xPhase, xMagnitude, waveTypeY, yPhase, yMagnitude, showWave, waveDebugColor, currentBlendMode, currentFont, textSplitMode, debugWaveType) {
+    constructor(name, textInput, fontSize, autoPulseFontSize, fontWeight, autoPulseWeight, numRepetitions, spaceBetweenWords, backgroundColor, textColors, speed, rotateWithPosition, rotateWithFlow, reverseAnimation, stepBetweenWords, waveTypeX, xPhase, xMagnitude, waveTypeY, yPhase, yMagnitude, showWave, waveDebugColor, currentBlendMode, currentFont, textSplitMode, debugWaveType, defaultGif) {
         this.name = name;
         this.textInput = textInput;
         this.fontSize = fontSize;
@@ -377,6 +377,7 @@ class Preset {
         this.currentFont = currentFont;
         this.textSplitMode = textSplitMode || 'word';
         this.debugWaveType = debugWaveType || 'circle';
+        this.defaultGif = defaultGif || '';
     }
 }
 
@@ -439,7 +440,8 @@ function savePreset(presetName) {
         document.getElementById('blendModeDropdown').value,
         document.getElementById('fontSelection').value,
         document.getElementById('textSplitMode').value,
-        document.getElementById('debugWaveType').value
+        document.getElementById('debugWaveType').value,
+        document.getElementById('defaultGifSelect').value
     );
 
     addPreset(preset);
@@ -521,6 +523,14 @@ function applyPreset(presetName, preset = null) {
         document.getElementById('fontSelection').value = preset.currentFont || 'Wix Madefor Text';
         document.getElementById('textSplitMode').value = preset.textSplitMode || 'word';
         document.getElementById('debugWaveType').value = preset.debugWaveType || 'circle';
+
+        if (preset.defaultGif) {
+            document.getElementById('defaultGifSelect').value = preset.defaultGif;
+            // Clear the file input if a default GIF is selected
+            document.getElementById('imageInput').value = '';
+        } else {
+            document.getElementById('defaultGifSelect').value = '';
+        }
 
         // Update the sketch variables
         updateSketchVariables();
@@ -612,7 +622,8 @@ function shufflePreset() {
         ["BLEND", "ADD", "DARKEST", "LIGHTEST", "DIFFERENCE", "EXCLUSION", "MULTIPLY", "SCREEN"][Math.floor(Math.random() * 8)], // Random blend mode
         ["Wix Madefor Text", "Roboto Flex", "Playwrite NZ"][Math.floor(Math.random() * 3)], // Random font selection
         textSplitMode, // Use the selected text split mode
-        ["circle", "square", "triangle","line","cross","rhombus"][Math.floor(Math.random() * 6)] // Random debug wave type
+        ["circle", "square", "triangle","line","cross","rhombus"][Math.floor(Math.random() * 6)], // Random debug wave type
+        document.getElementById('defaultGifSelect').value
     );
     presetsDictionary[randomPreset.name] = randomPreset;
     applyPreset(randomPreset.name);

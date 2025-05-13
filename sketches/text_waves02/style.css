@@ -13,7 +13,7 @@ body, html {
 body {
     background: rgb(0, 0, 0);
     display: grid;
-    grid-template-columns: 100px 2fr;
+    grid-template-columns: 300px 1fr;
 } 
 
 #ui {
@@ -26,6 +26,8 @@ body {
     box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1000;
 }
 
 #ui.hidden {
@@ -69,6 +71,7 @@ body {
     height: 100vh;
     overflow: hidden;
     position: relative;
+    z-index: 1;
 }
 
 canvas {
@@ -438,4 +441,18 @@ input[type="range"]:disabled::-webkit-slider-thumb {
     border: 1px solid #ddd;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.gif-select {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.gif-select:focus {
+    outline: none;
+    border-color: #666;
 }

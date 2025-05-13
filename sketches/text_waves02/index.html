@@ -29,7 +29,16 @@
                 <textarea id="textInput" rows="2">hello how are you</textarea>
             </div>
             <div class="control-group">
-                <label for="imageInput">Image:</label>
+                <label for="defaultGifSelect">Image/Gif:</label>
+                <select id="defaultGifSelect" class="gif-select">
+                    <option value="">Select a default GIF</option>
+                    <option value="gifs/sassy_hand.gif">Sassy Hand</option>
+                    <!-- <option value="gifs/animation2.gif">Animation 2</option> -->
+                    <!-- Add more options for each GIF -->
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="imageInput">Custom File:</label>
                 <input type="file" id="imageInput" accept="image/*">
             </div>
             <div class="control-group">
@@ -384,6 +393,13 @@
             const canvasHeightSlider = document.getElementById('canvasHeight');
             canvasWidthSlider.max = window.innerWidth;
             canvasHeightSlider.max = window.innerHeight;
+        });
+
+        // Add event listener for file input to reset dropdown
+        document.getElementById('imageInput').addEventListener('change', function() {
+            if (this.files.length > 0) {  // If a file was selected
+                document.getElementById('defaultGifSelect').value = '';  // Reset to "Select a default GIF"
+            }
         });
     </script>
 
