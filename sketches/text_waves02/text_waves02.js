@@ -128,7 +128,7 @@ function drawText() {
     let colorIndex = 0;
     const autoPulseWeight = document.getElementById('autoPulseWeight').checked;
 
-    drawWaveElements(numOfElements, widthSize, stepBetweenWords, (i) => {
+    drawWaveElements(numOfElements, elementWidth, stepBetweenWords, (i) => {
         // Calculate font size based on wave position if autoPulseFontSize is enabled
         let currentFontSize = fontSize;
         if (autoPulseFontSize) {
