@@ -14,43 +14,34 @@ let rotateWithFlow = false;
 
 //Typography
 let textInput = "hello how are you";
+let currentFont = 'Wix Madefor Text';
 let fontSize = 50;
 let stepBetweenWords=30;
 let spaceBetweenElements = 0;
-let elements = [];
+let numRepetitions = 1;
+let autoPulseWeight = false;
+let autoPulseFontSize = false;
+let textSplitMode = 'word';
 
 // Color Variables
 let backgroundColor = '#000000';
 let textColors = ['#FFFFFF', '#FF0000', '#00FF00'];
 let fontWeight = 400;
-let fontItalic = 0;
-
-// Blend Mode Variable
 let currentBlendMode = "BLEND";
 
-// Add this variable at the top with other UI variables
-let numRepetitions = 1;
+//Wave
 let waveDebugColor = '#00FF00';
-let autoPulseWeight = false;
-let autoPulseFontSize = false;
-
-let currentFont = 'Wix Madefor Text';
-
-// Add this with other UI variables at the top
-let textSplitMode = 'word';
-
-// Add this with other UI variables at the top
 let debugWaveType = 'circle';
 
-// Add these variables at the top with other UI variables
+//Canvas
 let canvasWidth = 3000;
 let canvasHeight = 3000;
 
-// Add these variables at the top with other UI variables
-let loadedMedia = null;
-let mediaKey = "1234567890MEDIA0987654321";
-
 //=========================================
+
+let elements = [];
+const mediaKey = "1234567890MEDIA0987654321";
+let loadedMedia = null;
 
 
 async function setup() {
