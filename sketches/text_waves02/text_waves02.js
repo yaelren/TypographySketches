@@ -541,10 +541,29 @@ function setUpUI() {
         const preset = this.value;
         if (preset !== 'custom') {
             const [width, height] = preset.split('x').map(Number);
-            document.getElementById('canvasWidth').value = width;
-            document.getElementById('canvasHeight').value = height;
-            updateValueDisplay('canvasWidth', width);
-            updateValueDisplay('canvasHeight', height);
+            let newWidth = width;
+            let newHeight = height;
+         
+            aspectRatio = width / height;
+            if(width > window.innerWidth){
+                newWidth = window.innerWidth;
+                newHeight = window.innerWidth / aspectRatio;
+            }
+            if(newHeight > window.innerHeight){
+                newHeight = window.innerHeight;
+                newWidth = window.innerHeight * aspectRatio;
+            }
+            console.log(newWidth, newHeight);
+            
+            // Update both the display values and the slider positions
+            const canvasWidthSlider = document.getElementById('canvasWidth');
+            const canvasHeightSlider = document.getElementById('canvasHeight');
+            
+            canvasWidthSlider.value = newWidth;
+            canvasHeightSlider.value = newHeight;
+            
+            updateValueDisplay('canvasWidth', newWidth);
+            updateValueDisplay('canvasHeight', newHeight);
             updateCanvasSize();
         }
     });
@@ -749,6 +768,8 @@ function updateSketchVariables() {
 function updateCanvasSize() {
     const newWidth = parseInt(document.getElementById('canvasWidth').value);
     const newHeight = parseInt(document.getElementById('canvasHeight').value);
+    console.log("newWidth", newWidth, "newHeight", newHeight);
+    // Update the canvas dimensions
     canvasWidth = newWidth;
     canvasHeight = newHeight;
     resizeCanvas(newWidth, newHeight);
