@@ -456,3 +456,37 @@ input[type="range"]:disabled::-webkit-slider-thumb {
     outline: none;
     border-color: #666;
 }
+
+/* Export Button Styles */
+.export-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #6b7280;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+/* Add specific positioning for the pause button */
+#pauseButton {
+    right: 100px; /* Position it to the left of the export button */
+}
+
+.export-button:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.export-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
