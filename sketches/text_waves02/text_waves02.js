@@ -55,6 +55,8 @@ async function setup() {
     await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap');
     await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Roboto+Flex:ital,wght@0,400..800;1,400..800&display=swap');
     await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Playwrite+NZ:wght@100..400&display=swap');
+
+    frameRate(60); // Explicitly set to 60 FPS
 }
 
 function windowResized() {
@@ -77,8 +79,8 @@ function draw() {
         drawWave();
     }
     drawText();
-    // drawVariableText();
 }
+
 function checkFPS(){
     const fps = frameRate();
     if(fps < 15){
@@ -288,8 +290,6 @@ function drawWaveElements(numOfElements, elementWidth, step, drawElement) {
     }
     pop();
 }
-
-
 
 function calculateWaveValue(angle, magnitude, waveType, index, elementWidth) {
     switch (waveType) {
