@@ -331,7 +331,7 @@ select:focus {
 }
 
 .action-button {
-    background: #6b7280;
+    background: #ff69b4; /* Hot pink background */
     color: white;
     border: none;
     padding: 6px 12px;
@@ -344,7 +344,7 @@ select:focus {
 }
 
 .action-button:hover {
-    background: #4b5563;
+    background: #ff1493; /* Deeper pink on hover */
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
