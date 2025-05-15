@@ -88,20 +88,20 @@ function exportAsVideo() {
         pauseButton.style.backgroundColor = '#dc2626';
         
         const canvas = document.querySelector('canvas');
-        const stream = canvas.captureStream(60);
+        const stream = canvas.captureStream(120); // You could increase this to 120 if needed
         
-        // Try different MP4 configurations
-        let mimeType = 'video/mp4';
+        // Try different WebM configurations
+        let mimeType = 'video/webm;codecs=vp9';
         if (!MediaRecorder.isTypeSupported(mimeType)) {
-            mimeType = 'video/mp4;codecs=avc1.42E01E';
+            mimeType = 'video/webm;codecs=vp8';
         }
         if (!MediaRecorder.isTypeSupported(mimeType)) {
-            mimeType = 'video/mp4;codecs=h264';
+            mimeType = 'video/webm';
         }
         
         currentMediaRecorder = new MediaRecorder(stream, {
             mimeType: mimeType,
-            videoBitsPerSecond: 1000000 // Reduced to 1 Mbps for better compatibility
+            videoBitsPerSecond: 8000000 // Increased to 8 Mbps for higher quality
         });
         
         const chunks = [];
@@ -111,7 +111,7 @@ function exportAsVideo() {
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'text-waves-export.mp4';
+            link.download = 'text-waves-export.webm';
             link.click();
             
             // Reset recording state
@@ -141,17 +141,17 @@ function createVideoFromFrames() {
     // Create a MediaRecorder
     const stream = canvas.captureStream(60); // 60 FPS
     const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'video/mp4'
+        mimeType: 'video/webm;codecs=vp9'
     });
     
     const chunks = [];
     mediaRecorder.ondataavailable = (e) => chunks.push(e.data);
     mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'video/mp4' });
+        const blob = new Blob(chunks, { type: 'video/webm' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'text-waves-export.mp4';
+        link.download = 'text-waves-export.webm';
         link.click();
     };
     
@@ -164,81 +164,6 @@ function createVideoFromFrames() {
     // }, 6000); // Changed from 5000 to 6000 for 6 seconds
 }
 
-// Function to export as GIF
-function exportAsGif() {
-    if (!isRecording) {
-        // Start recording
-        isRecording = true;
-        frames = [];
-        recordingStartTime = Date.now();
-        
-        // Change export button to show recording state
-        const exportButton = document.getElementById('exportButton');
-        exportButton.textContent = '⏺ Recording...';
-        exportButton.style.backgroundColor = '#dc2626'; // Red color for recording
-        
-        // Start capturing frames
-        const captureFrame = () => {
-            if (isRecording) {
-                const canvas = document.querySelector('canvas');
-                frames.push(canvas.toDataURL('image/png'));
-                setTimeout(captureFrame, 16.67); // Capture at 60 FPS
-            }
-        };
-        captureFrame();
-        
-        // Stop recording after 5 seconds
-        setTimeout(() => {
-            isRecording = false;
-            exportButton.textContent = 'Export';
-            exportButton.style.backgroundColor = '#6b7280';
-            
-            // Create GIF from frames
-            createGifFromFrames();
-        }, 5000);
-    }
-}
-
-// Function to create GIF from captured frames
-function createGifFromFrames() {
-    const canvas = document.querySelector('canvas');
-    const gif = new GIF({
-        workers: 2,
-        quality: 10,
-        width: canvas.width,
-        height: canvas.height,
-        fps: 30 // We'll create a 30fps GIF for better file size
-    });
-
-    // Convert data URLs to Image objects
-    const loadImage = (dataUrl) => {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => resolve(img);
-            img.src = dataUrl;
-        });
-    };
-
-    // Process frames
-    Promise.all(frames.map(loadImage))
-        .then((images) => {
-            // Add frames to GIF
-            images.forEach((img) => {
-                gif.addFrame(img, { delay: 33.33 }); // 1000ms / 30fps ≈ 33.33ms
-            });
-
-            // Render the GIF
-            gif.on('finished', (blob) => {
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'text-waves-export.gif';
-                link.click();
-            });
-
-            gif.render();
-        });
-}
 
 // Function to handle the pause/stop button click
 function handlePause() {
