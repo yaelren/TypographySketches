@@ -50,6 +50,7 @@ async function setup() {
     var c = createCanvas(canvasWidth, canvasHeight);
     c.parent("canvasWrapper");
     setUpUI();
+    setupGamepad();
 
     // Load both fonts
     await loadGoogleFontSet('https://fonts.googleapis.com/css2?family=Wix+Madefor+Text:ital,wght@0,400..800;1,400..800&display=swap');
@@ -68,6 +69,7 @@ function windowResized() {
 
 function draw() {
     checkFPS();
+    updateGamepadState();
     background(backgroundColor);
     textAlign(CENTER,CENTER);
     translate(width/2, 0);
